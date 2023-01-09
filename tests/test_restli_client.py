@@ -1,4 +1,4 @@
-from linkedin_api_client import restli_client
+from linkedin_api_client.restli_client import RestliClient
 
-def test_addNums():
-  assert restli_client.addNums(2,3) == 5
+def test_restliclient():
+  RestliClient.get(resource="/me", access_token="ABC123")
