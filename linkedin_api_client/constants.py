@@ -14,8 +14,15 @@ class HEADERS(Enum):
   USER_AGENT = 'user-agent'
 
 class CONTENT_TYPE(Enum):
-  URL_ENCODED = 'application/x-www-form-url-encoded'
+  URL_ENCODED = 'application/x-www-form-urlencoded'
+  JSON = 'application/json'
+  MULTIPART_MIXED_WITH_BOUNDARY = lambda boundary: f"multipart/mixed; boundary={boundary}"
 
+class HTTP_METHODS(Enum):
+  GET = "GET"
+  POST = "POST"
+  PUT = "PUT"
+  DELETE = "DELETE"
 
 class RESTLI_METHODS(Enum):
   GET = "GET"
@@ -33,3 +40,19 @@ class RESTLI_METHODS(Enum):
   BATCH_DELETE = "BATCH_DELETE"
   ACTION = "ACTION"
 
+RESTLI_METHOD_TO_HTTP_METHOD_MAP = {
+  "GET": "GET",
+  "BATCH_GET": "GET",
+  "GET_ALL": "GET",
+  "FINDER": "GET",
+  "BATCH_FINDER": "GET",
+  "UPDATE": "PUT",
+  "BATCH_UPDATE": "PUT",
+  "CREATE": "POST",
+  "BATCH_CREATE": "POST",
+  "PARTIAL_UPDATE": "POST",
+  "BATCH_PARTIAL_UPDATE": "POST",
+  "ACTION": "POST",
+  "DELETE": "DELETE",
+  "BATCH_DELETE": "DELETE"
+}

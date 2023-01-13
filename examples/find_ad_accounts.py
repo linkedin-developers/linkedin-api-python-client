@@ -1,5 +1,11 @@
+
+import os,sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from linkedin_api_client.restli_client import RestliClient
-import os
+from dotenv import load_dotenv,find_dotenv
+
+load_dotenv(find_dotenv())
 
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 

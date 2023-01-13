@@ -1,16 +1,16 @@
 from linkedin_api_client.constants import OAUTH_BASE_URL
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote
 
-def gnerate_member_auth_url(client_id: str, redirect_url: str, scopes: list, state: str = None):
+def generate_member_auth_url(client_id: str, redirect_url: str, scopes: list, state: str = None):
   if not scopes:
     raise Exception("At least one scope must be specified.")
 
   query_param_string = urlencode({
     "response_type": "code",
     "client_id": client_id,
-    redirect_uri: redirect_url,
-    scope: ",".join(scopes)
-  })
+    "redirect_uri": redirect_url,
+    "scope": " ".join(scopes)
+  }, quote_via=quote)
 
   if state:
     query_param_string += f"&state={state}"

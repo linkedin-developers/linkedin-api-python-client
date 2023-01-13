@@ -1,12 +1,16 @@
 import linkedin_api_client.constants as constants
+from linkedin_api_client.utils.encoder import encode
+from typing import Dict,Any
+from linkedin_api_client.errors import InvalidArgumentError
+import re
 
-def getRestApiBaseUrl(version_string):
+def get_rest_api_base_url(version_string):
   if version_string:
     return constants.VERSIONED_BASE_URL
   else:
     return constants.NON_VERSIONED_BASE_URL
 
-def getRestliRequestHeaders(*, restli_method, access_token, version_string=None, http_method_override=None, content_type="application/json"):
+def get_restli_request_headers(*, restli_method, access_token, version_string=None, http_method_override=None, content_type="application/json"):
   headers = {
     "Connection": "Keep-Alive",
     "X-RestLi-Protocol-Version": "2.0.0",
@@ -20,4 +24,50 @@ def getRestliRequestHeaders(*, restli_method, access_token, version_string=None,
     headers.update({ "X-HTTP-Method-Override": http_method_override })
 
   return headers
+
+def build_rest_url(resource_path_template:str, path_keys:Dict[str,Any]=None, version_string=None) -> str:
+  """Method to build the URL (not including query parameters) for a REST-based API call to LinkedIn.
+
+  Args:
+      resource_path_template (str): The resource path template string, beginning with a forward slash.
+        Path key placeholders (if any) should be specified using curly-braces, and the placeholders
+        must match the keys defined in the 'path_keys' argument. Examples: `/me` or `/adAccounts/{adAccountId}`
+        or `/socialActions/{id}/comments/{commentId}`
+      path_keys (Dict[str,Any], optional): Optional path keys dictionary whose keys should map to the
+        placeholder values in the 'resource_path_template' argument. The path keys may be complex keys (objects),
+        which will be properly encoded by this method. For example: `{"id": 123, "subId": 456}` or
+        `{"complexKey": {"key1": "urn:li:foobar:123", "key2": "urn:li:barbaz:456"}}`. Defaults to None.
+      version_string (_type_, optional): Optional version string to be provided if versioned APIs are being used.
+        Defaults to None.
+
+  Raises:
+      InvalidArgumentError: Error if placeholders in 'resource_path_template' don't match 'path_keys'
+
+  Returns:
+      str: The constructed URL of the API request, not including query parameters
+  """
+
+  if version_string:
+    base_url = constants.VERSIONED_BASE_URL
+  else:
+    base_url = constants.NON_VERSIONED_BASE_URL
+
+  # Validate resource_path_template and path_keys
+  num_path_keys = 0 if path_keys==None else len(path_keys.keys())
+  if path_keys:
+    encoded_path_keys = { k:encode(v) for (k, v) in path_keys.items() }
+  else:
+    encoded_path_keys = {}
+
+  placeholders = re.findall(r'{(.*?)}', resource_path_template)
+
+  if len(placeholders) != num_path_keys:
+    raise InvalidArgumentError("The number of placeholders in the 'resource_path_template' argument do not match the number of keys in the 'path_keys' argument")
+
+  try:
+    resource_path = resource_path_template.format(**encoded_path_keys)
+  except Exception as error:
+    raise InvalidArgumentError("The placeholders in the 'resource_path_template' argument do not match the keys in the 'path_keys' argument") from error
+
+  return f"{base_url}{resource_path}"
 
