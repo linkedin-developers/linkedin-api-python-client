@@ -1,5 +1,5 @@
 import requests
-from linkedin_api_client.constants import HEADERS, HTTP_METHODS, CONTENT_TYPE, RESTLI_METHOD_TO_HTTP_METHOD_MAP
+from linkedin_api_client.constants import *
 import linkedin_api_client.utils.api as apiutils
 import random
 import string
@@ -43,7 +43,7 @@ def maybe_apply_query_tunneling_get_requests(*, url, encoded_query_param_string,
 def maybe_apply_query_tunneling_requests_with_body(*,
                                                    encoded_query_param_string: str,
                                                    url,
-                                                   original_restli_method,
+                                                   original_restli_method: RESTLI_METHODS,
                                                    original_request_body,
                                                    access_token,
                                                    version_string

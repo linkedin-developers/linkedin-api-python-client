@@ -12,6 +12,7 @@ class HEADERS(Enum):
   LINKEDIN_VERSION = 'LinkedIn-Version'
   AUTHORIZATION = 'Authorization'
   USER_AGENT = 'user-agent'
+  CREATED_ENTITY_ID = 'x-restli-id'
 
 class CONTENT_TYPE(Enum):
   URL_ENCODED = 'application/x-www-form-urlencoded'

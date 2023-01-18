@@ -1,7 +1,14 @@
 from linkedin_api_client.utils.encoder import param_encode
+from linkedin_api_client.utils.decoder import reduced_decode
+from linkedin_api_client.constants import HEADERS
 from typing import Dict, Any
 import copy
+from requests import Response
 
+
+def get_created_entity_id(response: Response, decode: bool = True):
+  reduced_encoded_entity_id = response.headers.get(HEADERS.CREATED_ENTITY_ID.value, None)
+  return reduced_decode(reduced_encoded_entity_id)
 
 def encode_query_params_for_get_requests(query_params: Dict[str, Any]) -> str:
     """Encodes query params for HTTP GET requests

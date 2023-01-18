@@ -10,11 +10,11 @@ def get_rest_api_base_url(version_string):
   else:
     return constants.NON_VERSIONED_BASE_URL
 
-def get_restli_request_headers(*, restli_method, access_token, version_string=None, http_method_override=None, content_type="application/json"):
+def get_restli_request_headers(*, restli_method: constants.RESTLI_METHODS, access_token, version_string=None, http_method_override=None, content_type="application/json"):
   headers = {
     "Connection": "Keep-Alive",
     "X-RestLi-Protocol-Version": "2.0.0",
-    "X-RestLi-Method": restli_method,
+    "X-RestLi-Method": restli_method.value(),
     "Authorization": "Bearer " + access_token,
     "Content-Type": content_type
   }

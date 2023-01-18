@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Any, Union
+from typing import Dict, Optional, Any, Union, List, TypedDict
 from requests import Response
 
 EncodedEntityId = str
@@ -10,6 +10,13 @@ RestliEntity = Dict[str, Any]
 """
 Represents a Rest.li entity record
 """
+
+class Paging:
+  def __init__(self, start: int, count: int, total: int):
+    self.start = start
+    self.count = count
+    self.total = total
+
 
 class BaseRestliResponse:
   """
@@ -45,36 +52,135 @@ class BatchGetResponse(BaseRestliResponse):
     url: str,
     headers: Dict[str, str],
     response: Response,
-    entitiesMap: Dict[EncodedEntityId, RestliEntity],
+    resultsMap: Dict[EncodedEntityId, RestliEntity],
     statusesMap: Dict[EncodedEntityId, int],
     errorsMap: Dict[EncodedEntityId, Any]
-  ) -> None:
+  ):
     super().__init__(status_code=status_code, headers=headers, url=url, response=response)
-    self._entitiesMap = entitiesMap
-    self._statusesMap = statusesMap
-    self._errorsMap = errorsMap
+    self.resultsMap = resultsMap
+    self.statusesMap = statusesMap
+    self.errorsMap = errorsMap
 
-  @property
-  def entitiesMap(self) -> Dict[EncodedEntityId, RestliEntity]:
-    """
-    Returns:
-        Dict[EncodedEntityId, RestliEntity]: A map of entities that were successfully retrieved.
-    """
-    return self._entitiesMap
+class CollectionResponse(BaseRestliResponse):
+  def __init__(
+    self,
+    status_code: int,
+    url: str,
+    headers: Dict[str, str],
+    response: Response,
+    elements: List[RestliEntity],
+    paging: Optional[Paging],
+    metadata: Optional[Any]
+  ):
+    super().__init__(status_code=status_code, headers=headers, url=url, response=response)
+    self.elements = elements
+    self.paging = paging
+    self.metadata = metadata
 
-  @property
-  def statusesMap(self) -> Dict[EncodedEntityId, int]:
-    """
-    Returns:
-        Dict[EncodedEntityId, int]: A map of entities and their corresponding status code
-    """
-    return self._statusesMap
+class BatchFinderResult:
+  def __init__(self, elements: List[RestliEntity], paging: Paging = None, metadata = None, error = None, isError: bool = False):
+    self.elements = elements
+    self.paging = paging
+    self.metadata = metadata
+    self.error = error
+    self.isError = isError
 
-  @property
-  def errorsMap(self) -> Dict[EncodedEntityId, Any]:
-    """
-    Returns:
-        Dict[EncodedEntityId, Any]: A map containing entities that could not be successfully fetched
-        and their associated error responses
-    """
-    return self._errorsMap
+class BatchFinderResponse(BaseRestliResponse):
+  def __init__(
+    self,
+    status_code: int,
+    url: str,
+    headers: Dict[str, str],
+    response: Response,
+    results: List[BatchFinderResult]
+  ):
+    super().__init__(status_code=status_code, headers=headers, url=url, response=response)
+    self.results = results
+
+class CreateResponse(BaseRestliResponse):
+  def __init__(
+    self,
+    status_code: int,
+    url: str,
+    headers: Dict[str, str],
+    response: Response,
+    entityId: Optional[EncodedEntityId] = None,
+    entity: Optional[RestliEntity] = None
+  ):
+    super().__init__(status_code=status_code, headers=headers, url=url, response=response)
+    self.entityId = entityId
+    self.entity = entity
+
+class BatchCreateResult:
+  def __init__(self, status: int, id: str, error: Any):
+    self.status = status
+    self.id = id
+    self.error = error
+
+class BatchCreateResponse(BaseRestliResponse):
+  def __init__(
+    self,
+    status_code: int,
+    url: str,
+    headers: Dict[str, str],
+    response: Response,
+    elements: List[BatchCreateResult]
+  ):
+    super().__init__(status_code=status_code, headers=headers, url=url, response=response)
+    self.elements = elements
+
+class UpdateResponse(BaseRestliResponse):
+  def __init__(
+    self,
+    status_code: int,
+    url: str,
+    headers: Dict[str, str],
+    response: Response,
+    entity: Optional[RestliEntity]
+  ):
+    super().__init__(status_code=status_code, headers=headers, url=url, response=response)
+    self.entity = entity
+
+class BatchUpdateResult(TypedDict):
+  # TODO add support for return entity
+  status: int
+
+class BatchUpdateResponse(BaseRestliResponse):
+  def __init__(
+    self,
+    status_code: int,
+    url: str,
+    headers: Dict[str, str],
+    response: Response,
+    results: Dict[EncodedEntityId, BatchUpdateResult]
+  ):
+    super().__init__(status_code=status_code, headers=headers, url=url, response=response)
+    self.results = results
+
+class BatchDeleteResult(TypedDict):
+  status: int
+
+class BatchDeleteResponse(BaseRestliResponse):
+  def __init__(
+    self,
+    status_code: int,
+    url: str,
+    headers: Dict[str, str],
+    response: Response,
+    results: Dict[EncodedEntityId, BatchDeleteResult]
+  ):
+    super().__init__(status_code=status_code, headers=headers, url=url, response=response)
+    self.results = results
+
+class ActionResponse(BaseRestliResponse):
+  def __init__(
+    self,
+    status_code: int,
+    url: str,
+    headers: Dict[str, str],
+    response: Response,
+    value: Any
+  ):
+    super().__init__(status_code=status_code, headers=headers, url=url, response=response)
+    self.value = value
+
