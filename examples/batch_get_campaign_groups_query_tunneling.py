@@ -30,7 +30,7 @@ for i in range(0, 400):
 
 try:
   batchResponse = restli_client.batch_get(
-    resource_path_template=AD_CAMPAIGN_GROUPS_RESOURCE,
+    resource_path=AD_CAMPAIGN_GROUPS_RESOURCE,
     ids=ids_list,
     access_token=ACCESS_TOKEN,
     version_string=MDP_VERSION

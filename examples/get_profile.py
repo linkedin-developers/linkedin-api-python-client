@@ -22,7 +22,7 @@ restli_client = RestliClient()
 Basic usage to fetch current member profile
 """
 response = restli_client.get(
-  resource_path_template=PROFILE_RESOURCE,
+  resource_path=PROFILE_RESOURCE,
   access_token=ACCESS_TOKEN
 )
 print("Basic usage:", response.entity)
@@ -31,7 +31,7 @@ print("Basic usage:", response.entity)
 Usage with field projections
 """
 response = restli_client.get(
-  resource_path_template=PROFILE_RESOURCE,
+  resource_path=PROFILE_RESOURCE,
   access_token=ACCESS_TOKEN,
   query_params={
     "fields": "id,firstName,lastName"
@@ -43,7 +43,7 @@ print("Usage with field projections:", response.entity)
 Usage with decoration of displayImage
 """
 response = restli_client.get(
-  resource_path_template=PROFILE_RESOURCE,
+  resource_path=PROFILE_RESOURCE,
   access_token=ACCESS_TOKEN,
   query_params={
     "projection": "(id,firstName,lastName,profilePicture(displayImage~:playableStreams))"

@@ -23,11 +23,11 @@ class ResponseFormatter:
       response=response
     )
 
-class EntityResponseFormatter(ResponseFormatter):
+class GetResponseFormatter(ResponseFormatter):
   @classmethod
   @wrap_decode_exception
-  def format_response(cls, response) -> EntityResponse:
-    return EntityResponse(
+  def format_response(cls, response) -> GetResponse:
+    return GetResponse(
       status_code=response.status_code,
       url=response.url,
       headers=response.headers,

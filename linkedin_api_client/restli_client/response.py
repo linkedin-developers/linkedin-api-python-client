@@ -28,7 +28,7 @@ class BaseRestliResponse:
     self.headers = headers
     self.url = url
 
-class EntityResponse(BaseRestliResponse):
+class GetResponse(BaseRestliResponse):
   def __init__(
     self,
     status_code: int,

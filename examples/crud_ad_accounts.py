@@ -24,7 +24,7 @@ restli_client = RestliClient()
 Find ad accounts by search criteria
 '''
 r = restli_client.finder(
-    resource_path_template=AD_ACCOUNTS_RESOURCE,
+    resource_path=AD_ACCOUNTS_RESOURCE,
     finder_name='search',
     query_params={
         "search": {
@@ -44,7 +44,7 @@ print(f"Total results: {r.paging.total}")
 
 request = (
   RequestBuilder.finder(
-    resource_path_template=AD_ACCOUNTS_RESOURCE,
+    resource_path=AD_ACCOUNTS_RESOURCE,
     finder_name="search",
     access_token=ACCESS_TOKEN
   )
