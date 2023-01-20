@@ -3,6 +3,8 @@ from linkedin_api_client.common.errors import ResponseFormattingError
 from linkedin_api_client.utils.restli import get_created_entity_id
 from functools import wraps
 from requests import Response
+from typing import TypeVar, Generic
+from abc import ABC, abstractmethod
 
 def wrap_decode_exception(fn):
   @wraps(fn)
@@ -13,29 +15,29 @@ def wrap_decode_exception(fn):
       raise ResponseFormattingError from e
   return wrap
 
-class ResponseFormatter:
-  @classmethod
-  def format_response(cls, response: Response):
-    return BaseRestliResponse(
-      status_code=response.status_code,
-      url=response.url,
-      headers=response.headers,
-      response=response
-    )
+T = TypeVar('T', bound=BaseRestliResponse)
 
-class GetResponseFormatter(ResponseFormatter):
+class BaseResponseFormatter(ABC, Generic[T]):
+  @classmethod
+  @abstractmethod
+  def format_response(cls, response: Response) -> T:
+    pass
+
+class GetResponseFormatter(BaseResponseFormatter[GetResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response) -> GetResponse:
+    json_data = response.json()
+
     return GetResponse(
       status_code=response.status_code,
       url=response.url,
       headers=response.headers,
       rawData=response.content,
-      entity=response.content
+      entity=json_data
     )
 
-class BatchGetResponseFormatter(ResponseFormatter):
+class BatchGetResponseFormatter(BaseResponseFormatter[BatchGetResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response:Response) -> BatchGetResponse:
@@ -50,7 +52,7 @@ class BatchGetResponseFormatter(ResponseFormatter):
       errorsMap=getattr(json_data, "errors", None)
     )
 
-class CollectionResponseFormatter(ResponseFormatter):
+class CollectionResponseFormatter(BaseResponseFormatter[CollectionResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> CollectionResponse:
@@ -71,7 +73,7 @@ class CollectionResponseFormatter(ResponseFormatter):
       metadata=getattr(json_data, "metadata", None)
     )
 
-class BatchFinderResponseFormatter(ResponseFormatter):
+class BatchFinderResponseFormatter(BaseResponseFormatter[BatchFinderResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> BatchFinderResponse:
@@ -98,7 +100,7 @@ class BatchFinderResponseFormatter(ResponseFormatter):
       getattr(result, "isError", None)
     )
 
-class CreateResponseFormatter(ResponseFormatter):
+class CreateResponseFormatter(BaseResponseFormatter[CreateResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> CreateResponse:
@@ -113,7 +115,7 @@ class CreateResponseFormatter(ResponseFormatter):
       entity=json_data if json_data else None
     )
 
-class BatchCreateResponseFormatter(ResponseFormatter):
+class BatchCreateResponseFormatter(BaseResponseFormatter[BatchCreateResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> BatchCreateResponse:
@@ -138,7 +140,7 @@ class BatchCreateResponseFormatter(ResponseFormatter):
       getattr(result, "error", None)
     )
 
-class UpdateResponseFormatter(ResponseFormatter):
+class UpdateResponseFormatter(BaseResponseFormatter[UpdateResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> UpdateResponse:
@@ -152,7 +154,7 @@ class UpdateResponseFormatter(ResponseFormatter):
       entity=json_data if json_data is not None else None
     )
 
-class BatchUpdateResponseFormatter(ResponseFormatter):
+class BatchUpdateResponseFormatter(BaseResponseFormatter[BatchUpdateResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> BatchUpdateResponse:
@@ -176,7 +178,18 @@ class BatchUpdateResponseFormatter(ResponseFormatter):
       status=getattr(result, "status")
     )
 
-class BatchDeleteResponseFormatter(ResponseFormatter):
+class DeleteResponseFormatter(BaseResponseFormatter[BaseRestliResponse]):
+  @classmethod
+  @wrap_decode_exception
+  def format_response(cls, response: Response) -> BaseRestliResponse:
+    return BaseRestliResponse(
+      status_code=response.status_code,
+      url=response.url,
+      headers=response.headers,
+      response=response
+    )
+
+class BatchDeleteResponseFormatter(BaseResponseFormatter[BatchDeleteResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> BatchDeleteResponse:
@@ -200,7 +213,7 @@ class BatchDeleteResponseFormatter(ResponseFormatter):
       status=getattr(result, "status")
     )
 
-class ActionResponseFormatter(ResponseFormatter):
+class ActionResponseFormatter(ResponseFormatter[ActionResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> ActionResponse:

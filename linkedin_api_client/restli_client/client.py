@@ -1,20 +1,21 @@
 import requests
 import copy
-from typing import Union, Dict, Any, List, Optional, Type, Tuple
+from typing import Union, Dict, Any, List, TypeVar, Optional, Type, Tuple
 import linkedin_api_client.utils.api as apiutils
 import linkedin_api_client.utils.encoder as encoder
 from linkedin_api_client.utils.restli import encode_query_params_for_get_requests
 from linkedin_api_client.utils.query_tunneling import maybe_apply_query_tunneling_get_requests, maybe_apply_query_tunneling_requests_with_body
 from linkedin_api_client.common.constants import RESTLI_METHODS
-from linkedin_api_client.restli_client.response_formatter import ActionResponseFormatter, BatchCreateResponseFormatter, \
+from linkedin_api_client.restli_client.response_formatter import BaseResponseFormatter, ActionResponseFormatter, BatchCreateResponseFormatter, \
     BatchDeleteResponseFormatter, BatchFinderResponseFormatter, CollectionResponseFormatter, BatchGetResponseFormatter, \
-    CreateResponseFormatter, GetResponseFormatter, BatchUpdateResponseFormatter, ResponseFormatter, UpdateResponseFormatter
+    CreateResponseFormatter, GetResponseFormatter, BatchUpdateResponseFormatter, DeleteResponseFormatter, UpdateResponseFormatter
 from linkedin_api_client.restli_client.response import ActionResponse,BaseRestliResponse, BatchCreateResponse, \
     BatchDeleteResponse, BatchFinderResponse, BatchUpdateResponse, CreateResponse, GetResponse, \
     BatchGetResponse, CollectionResponse, RestliEntity, UpdateResponse
 
 RestliEntityId = Union[str, int, Dict[str, Any]]
 
+T = TypeVar('T', bound=BaseRestliResponse)
 
 class RestliClient:
     def __init__(self, hooks: Optional[Dict[str, List[Any] | Any]]):
@@ -28,7 +29,7 @@ class RestliClient:
             access_token: str,
             path_keys: Optional[Dict[str, Any]] = None,
             query_params: Optional[Dict[str, Any]] = {},
-            version_string: Optional[str] = None) -> GetResponse:
+            version_string: Optional[str] = None) -> BaseRestliResponse:
 
         encoded_query_param_string = encode_query_params_for_get_requests(
             query_params)
@@ -323,7 +324,7 @@ class RestliClient:
             encoded_query_param_string=encoded_query_param_string,
             access_token=access_token,
             version_string=version_string,
-            formatter=ResponseFormatter
+            formatter=DeleteResponseFormatter
         )
 
     def batch_delete(
@@ -381,12 +382,12 @@ class RestliClient:
         restli_method: RESTLI_METHODS,
         resource_path: str,
         access_token: str,
-        formatter: Type[ResponseFormatter],
+        formatter: Type[BaseResponseFormatter[T]],
         path_keys: Optional[Dict[str, Any]] = None,
         encoded_query_param_string: Optional[str] = None,
         request_body: Optional[Any] = None,
         version_string: Optional[str] = None
-    ) -> Type[BaseRestliResponse]:
+    ) -> T:
         url = apiutils.build_rest_url(
             resource_path=resource_path,
             path_keys=path_keys,
