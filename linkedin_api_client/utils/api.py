@@ -1,7 +1,7 @@
-import linkedin_api_client.constants as constants
+import linkedin_api_client.common.constants as constants
 from linkedin_api_client.utils.encoder import encode
-from typing import Dict,Any
-from linkedin_api_client.errors import InvalidArgumentError
+from typing import Dict, Any, Optional
+from linkedin_api_client.common.errors import InvalidArgumentError
 import re
 
 def get_rest_api_base_url(version_string):
@@ -25,7 +25,7 @@ def get_restli_request_headers(*, restli_method: constants.RESTLI_METHODS, acces
 
   return headers
 
-def build_rest_url(resource_path:str, path_keys:Dict[str,Any]=None, version_string=None) -> str:
+def build_rest_url(resource_path:str, path_keys: Optional[Dict[str,Any]] = None, version_string=None) -> str:
   """Method to build the URL (not including query parameters) for a REST-based API call to LinkedIn.
 
   Args:

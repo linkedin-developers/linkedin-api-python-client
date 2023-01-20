@@ -1,8 +1,9 @@
 import requests
-import linkedin_api_client.constants as constants
+import linkedin_api_client.common.constants as constants
 import linkedin_api_client.utils.oauth as oauth
 import curlify
-from linkedin_api_client.auth_response import AccessToken3LResponse
+from linkedin_api_client.auth_client.response import AccessToken3LResponse
+from typing import Optional
 
 class AuthClient:
   def __init__(self, client_id, client_secret, redirect_url):
@@ -23,7 +24,7 @@ class AuthClient:
       constants.HEADERS.CONTENT_TYPE.value: constants.CONTENT_TYPE.URL_ENCODED.value
     })
 
-  def generate_member_auth_url(self, scopes: list, state: str = None) -> str:
+  def generate_member_auth_url(self, scopes: list, state: Optional[str] = None) -> str:
     return oauth.generate_member_auth_url(
       client_id = self.client_id,
       redirect_url = self.redirect_url,

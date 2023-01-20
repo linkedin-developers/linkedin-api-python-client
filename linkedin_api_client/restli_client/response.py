@@ -1,15 +1,7 @@
 from typing import Dict, Optional, Any, Union, List, TypedDict
 from requests import Response
+from linkedin_api_client.restli_client.types import RestliEntity, EncodedEntityId
 
-EncodedEntityId = str
-"""
-Represents an encoded entity id
-"""
-
-RestliEntity = Dict[str, Any]
-"""
-Represents a Rest.li entity record
-"""
 
 class Paging:
   def __init__(self, start: int, count: int, total: int):
@@ -19,10 +11,7 @@ class Paging:
 
 
 class BaseRestliResponse:
-  """
-
-  """
-  def __init__(self, status_code: int, headers: dict, url: str, response: Response = None):
+  def __init__(self, status_code: int, headers: dict, url: str, response: Response):
     self.status_code = status_code
     self.response = response
     self.headers = headers
@@ -78,7 +67,7 @@ class CollectionResponse(BaseRestliResponse):
     self.metadata = metadata
 
 class BatchFinderResult:
-  def __init__(self, elements: List[RestliEntity], paging: Paging = None, metadata = None, error = None, isError: bool = False):
+  def __init__(self, elements: List[RestliEntity], paging: Optional[Paging] = None, metadata = None, error = None, isError: bool = False):
     self.elements = elements
     self.paging = paging
     self.metadata = metadata

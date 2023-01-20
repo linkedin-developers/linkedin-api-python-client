@@ -1,7 +1,8 @@
-from linkedin_api_client.constants import OAUTH_BASE_URL
+from linkedin_api_client.common.constants import OAUTH_BASE_URL
 from urllib.parse import urlencode, quote
+from typing import Optional
 
-def generate_member_auth_url(client_id: str, redirect_url: str, scopes: list, state: str = None):
+def generate_member_auth_url(client_id: str, redirect_url: str, scopes: list, state: Optional[str] = None):
   if not scopes:
     raise Exception("At least one scope must be specified.")
 

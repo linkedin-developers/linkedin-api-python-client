@@ -9,7 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from flask import Flask,redirect,request
 from dotenv import load_dotenv,find_dotenv
-from linkedin_api_client.auth_client import AuthClient
+from linkedin_api_client.auth.auth_client import AuthClient
 from linkedin_api_client.restli_client import RestliClient
 
 load_dotenv(find_dotenv())

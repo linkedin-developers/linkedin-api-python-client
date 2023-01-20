@@ -1,9 +1,10 @@
 import requests
-from linkedin_api_client.constants import *
+from linkedin_api_client.common.constants import RESTLI_METHODS, CONTENT_TYPE, HTTP_METHODS, RESTLI_METHOD_TO_HTTP_METHOD_MAP, HEADERS
 import linkedin_api_client.utils.api as apiutils
 import random
 import string
 import json
+from typing import Optional, Type
 
 MAX_QUERY_STRING_LENGTH = 4000
 
@@ -12,7 +13,7 @@ def is_query_tunneling_required(encoded_query_param_string):
     return encoded_query_param_string and len(encoded_query_param_string) > MAX_QUERY_STRING_LENGTH
 
 
-def maybe_apply_query_tunneling_get_requests(*, url, encoded_query_param_string, original_restli_method: str, access_token, version_string):
+def maybe_apply_query_tunneling_get_requests(*, url: str, encoded_query_param_string: Optional[str] = None, original_restli_method: RESTLI_METHODS, access_token, version_string):
     if is_query_tunneling_required(encoded_query_param_string):
         request = requests.Request(
             method=HTTP_METHODS.POST.value,
@@ -29,7 +30,7 @@ def maybe_apply_query_tunneling_get_requests(*, url, encoded_query_param_string,
     else:
         url = f"{url}?{encoded_query_param_string}" if encoded_query_param_string else url
         request = requests.Request(
-            method=RESTLI_METHOD_TO_HTTP_METHOD_MAP[original_restli_method.upper(
+            method=RESTLI_METHOD_TO_HTTP_METHOD_MAP[original_restli_method.value.upper(
             )],
             url=url,
             headers=apiutils.get_restli_request_headers(
@@ -41,17 +42,17 @@ def maybe_apply_query_tunneling_get_requests(*, url, encoded_query_param_string,
     return request.prepare()
 
 def maybe_apply_query_tunneling_requests_with_body(*,
-                                                   encoded_query_param_string: str,
+                                                   encoded_query_param_string: Optional[str],
                                                    url,
                                                    original_restli_method: RESTLI_METHODS,
                                                    original_request_body,
                                                    access_token,
                                                    version_string
                                                    ):
-    original_http_method = RESTLI_METHOD_TO_HTTP_METHOD_MAP[original_restli_method.upper(
+    original_http_method = RESTLI_METHOD_TO_HTTP_METHOD_MAP[original_restli_method.value.upper(
     )]
 
-    if is_query_tunneling_required(encoded_query_param_string):
+    if encoded_query_param_string and is_query_tunneling_required(encoded_query_param_string):
         boundary = generate_random_string()
         raw_request_body_string = encoded_query_param_string + \
             json.dumps(original_request_body)
@@ -68,7 +69,7 @@ def maybe_apply_query_tunneling_requests_with_body(*,
             f"--{boundary}--"
         )
 
-        prepared_request = requests.Request(
+        request = requests.Request(
             method=HTTP_METHODS.POST.value,
             url=url,
             data=multipart_request_body,
@@ -84,7 +85,7 @@ def maybe_apply_query_tunneling_requests_with_body(*,
     else:
         final_url = f"{url}?{encoded_query_param_string}" if encoded_query_param_string else url
 
-        prepared_request = requests.Request(
+        request = requests.Request(
             method=original_http_method,
             url=final_url,
             headers=apiutils.get_restli_request_headers(
@@ -93,7 +94,7 @@ def maybe_apply_query_tunneling_requests_with_body(*,
                 version_string=version_string
             )
         )
-    return prepared_request
+    return request.prepare()
 
 
 def generate_random_string():

@@ -1,5 +1,5 @@
-from linkedin_api_client.response import *
-from linkedin_api_client.errors import ResponseFormattingError
+from linkedin_api_client.restli_client.response import *
+from linkedin_api_client.common.errors import ResponseFormattingError
 from linkedin_api_client.utils.restli import get_created_entity_id
 from functools import wraps
 from requests import Response
@@ -45,7 +45,7 @@ class BatchGetResponseFormatter(ResponseFormatter):
       url=response.url,
       headers=response.headers,
       response=response,
-      entitiesMap=getattr(json_data, "results", None),
+      resultsMap=getattr(json_data, "results", None),
       statusesMap=getattr(json_data, "statuses", None),
       errorsMap=getattr(json_data, "errors", None)
     )
