@@ -18,7 +18,7 @@ RestliEntityId = Union[str, int, Dict[str, Any]]
 T = TypeVar('T', bound=BaseRestliResponse)
 
 class RestliClient:
-    def __init__(self, hooks: Optional[Dict[str, List[Any] | Any]]):
+    def __init__(self, hooks: Optional[Dict[str, List[Any] | Any]] = None):
         self.session = requests.Session()
         if hooks is not None:
             self.session.hooks = hooks
@@ -29,7 +29,7 @@ class RestliClient:
             access_token: str,
             path_keys: Optional[Dict[str, Any]] = None,
             query_params: Optional[Dict[str, Any]] = {},
-            version_string: Optional[str] = None) -> BaseRestliResponse:
+            version_string: Optional[str] = None) -> GetResponse:
 
         encoded_query_param_string = encode_query_params_for_get_requests(
             query_params)
@@ -94,7 +94,7 @@ class RestliClient:
                resource_path: str,
                finder_name: str,
                access_token: str,
-               path_keys: Optional[Dict[str, Any]],
+               path_keys: Optional[Dict[str, Any]] = None,
                query_params: Optional[Dict[str, Any]] = None,
                version_string: Optional[str] = None
                ) -> CollectionResponse:

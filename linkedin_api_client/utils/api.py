@@ -14,7 +14,7 @@ def get_restli_request_headers(*, restli_method: constants.RESTLI_METHODS, acces
   headers = {
     "Connection": "Keep-Alive",
     "X-RestLi-Protocol-Version": "2.0.0",
-    "X-RestLi-Method": restli_method.value(),
+    "X-RestLi-Method": restli_method.value,
     "Authorization": "Bearer " + access_token,
     "Content-Type": content_type
   }

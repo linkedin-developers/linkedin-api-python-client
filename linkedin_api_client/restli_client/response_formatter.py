@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 
 def wrap_decode_exception(fn):
   @wraps(fn)
-  def wrap(cls, response):
+  def wrap(cls, response: Response):
     try:
       return fn(cls, response)
     except Exception as e:
@@ -36,6 +36,7 @@ class GetResponseFormatter(BaseResponseFormatter[GetResponse]):
       rawData=response.content,
       entity=json_data
     )
+
 
 class BatchGetResponseFormatter(BaseResponseFormatter[BatchGetResponse]):
   @classmethod
@@ -213,7 +214,7 @@ class BatchDeleteResponseFormatter(BaseResponseFormatter[BatchDeleteResponse]):
       status=getattr(result, "status")
     )
 
-class ActionResponseFormatter(ResponseFormatter[ActionResponse]):
+class ActionResponseFormatter(BaseResponseFormatter[ActionResponse]):
   @classmethod
   @wrap_decode_exception
   def format_response(cls, response: Response) -> ActionResponse:

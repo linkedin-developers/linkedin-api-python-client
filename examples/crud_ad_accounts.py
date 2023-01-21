@@ -1,10 +1,8 @@
 
 # Sets the path to locate local linkedin_api_client module
 from dotenv import load_dotenv, find_dotenv
-from linkedin_api_client.request_builder import FinderRequestBuilder, RequestBuilder
-from linkedin_api_client.restli_client import RestliClient
-from linkedin_api_client.response import CollectionResponse
-from linkedin_api_client.request import RestliRequest
+from linkedin_api_client.restli_client.client import RestliClient
+from linkedin_api_client.restli_client.response import CollectionResponse
 import json
 import os
 import sys
@@ -15,10 +13,38 @@ load_dotenv(find_dotenv())
 from typing import Type
 
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+if ACCESS_TOKEN is None:
+  raise Exception('A valid access token must be defined in the /examples/.env file under the variable name "ACCESS_TOKEN"')
+
 AD_ACCOUNTS_RESOURCE = '/adAccounts'
 MDP_VERSION = '202212'
 
 restli_client = RestliClient()
+
+create_response = restli_client.create(
+    resource_path=AD_ACCOUNTS_RESOURCE,
+    entity={
+      "name": 'Test Ad Account',
+      "reference": 'urn:li:organization:123',
+      "status": 'DRAFT',
+      "type": 'BUSINESS',
+      "test": True
+    },
+    access_token=ACCESS_TOKEN,
+    version_string=MDP_VERSION
+  )
+print(f"Successfully created ad account: {create_response.entity_id}")
+
+restli_client.delete(
+  resource_path=f"{AD_ACCOUNTS_RESOURCE}/{id}",
+  path_keys={
+    "id": create_response.entity_id
+  },
+  access_token=ACCESS_TOKEN,
+  version_string=MDP_VERSION
+)
+print(f"Successfully deleted ad account.")
+
 
 '''
 Find ad accounts by search criteria
@@ -42,23 +68,6 @@ r = restli_client.finder(
 print("Find ad accounts result: ", json.dumps(r.elements))
 print(f"Total results: {r.paging.total}")
 
-request = (
-  RequestBuilder.finder(
-    resource_path=AD_ACCOUNTS_RESOURCE,
-    finder_name="search",
-    access_token=ACCESS_TOKEN
-  )
-    .set_query_params({
-      "search": {
-          "status": {
-              "values": ["ACTIVE", "DRAFT", "CANCELED"]
-          },
-          "test": False
-      }
-    })
-    .set_start(1)
-    .set_count(5)
-    .build()
-)
+
 
 response = restli_client.request(request)
