@@ -18,10 +18,8 @@ RestliEntityId = Union[str, int, Dict[str, Any]]
 T = TypeVar('T', bound=BaseRestliResponse)
 
 class RestliClient:
-    def __init__(self, hooks: Optional[Dict[str, List[Any] | Any]] = None):
+    def __init__(self):
         self.session = requests.Session()
-        if hooks is not None:
-            self.session.hooks = hooks
 
     def get(
             self, *,

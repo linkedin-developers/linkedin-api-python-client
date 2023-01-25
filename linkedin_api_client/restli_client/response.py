@@ -24,10 +24,10 @@ class GetResponse(BaseRestliResponse):
     status_code: int,
     url: str,
     headers: CaseInsensitiveDict[str],
-    rawData,
+    response: Response,
     entity: Union[Dict[str, Any], str, int, bool]
   ) -> None:
-    super().__init__(status_code, headers, url, rawData)
+    super().__init__(status_code, headers, url, response)
     self._entity = entity
 
   @property
@@ -94,11 +94,11 @@ class CreateResponse(BaseRestliResponse):
     url: str,
     headers: CaseInsensitiveDict[str],
     response: Response,
-    entityId: Optional[EncodedEntityId] = None,
+    entity_id: Optional[EncodedEntityId] = None,
     entity: Optional[RestliEntity] = None
   ):
     super().__init__(status_code=status_code, headers=headers, url=url, response=response)
-    self.entityId = entityId
+    self.entity_id = entity_id
     self.entity = entity
 
 class BatchCreateResult:

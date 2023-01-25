@@ -33,7 +33,7 @@ class GetResponseFormatter(BaseResponseFormatter[GetResponse]):
       status_code=response.status_code,
       url=response.url,
       headers=response.headers,
-      rawData=response.content,
+      response=response,
       entity=json_data
     )
 
