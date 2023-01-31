@@ -1,15 +1,16 @@
 import requests
 import copy
-from typing import Union, Dict, Any, List, TypeVar, Optional, Type, Tuple
-import linkedin_api_client.utils.api as apiutils
-import linkedin_api_client.utils.encoder as encoder
-from linkedin_api_client.utils.restli import encode_query_params_for_get_requests
-from linkedin_api_client.utils.query_tunneling import maybe_apply_query_tunneling_get_requests, maybe_apply_query_tunneling_requests_with_body
-from linkedin_api_client.common.constants import RESTLI_METHODS
-from linkedin_api_client.restli_client.response_formatter import BaseResponseFormatter, ActionResponseFormatter, BatchCreateResponseFormatter, \
+from typing import Union, Dict, Any, List, Optional, Type, Tuple, TypeVar
+from linkedin_api.clients.common.response import BaseResponse
+import linkedin_api.clients.restli.utils.api as apiutils
+import linkedin_api.clients.restli.utils.encoder as encoder
+from linkedin_api.clients.restli.utils.restli import encode_query_params_for_get_requests
+from linkedin_api.clients.restli.utils.query_tunneling import maybe_apply_query_tunneling_get_requests, maybe_apply_query_tunneling_requests_with_body
+from linkedin_api.common.constants import RESTLI_METHODS
+from linkedin_api.clients.restli.response_formatter import BaseResponseFormatter, ActionResponseFormatter, BatchCreateResponseFormatter, \
     BatchDeleteResponseFormatter, BatchFinderResponseFormatter, CollectionResponseFormatter, BatchGetResponseFormatter, \
     CreateResponseFormatter, GetResponseFormatter, BatchUpdateResponseFormatter, DeleteResponseFormatter, UpdateResponseFormatter
-from linkedin_api_client.restli_client.response import ActionResponse,BaseRestliResponse, BatchCreateResponse, \
+from linkedin_api.clients.restli.response import BaseRestliResponse, ActionResponse, BatchCreateResponse, \
     BatchDeleteResponse, BatchFinderResponse, BatchUpdateResponse, CreateResponse, GetResponse, \
     BatchGetResponse, CollectionResponse, RestliEntity, UpdateResponse
 
@@ -354,21 +355,28 @@ class RestliClient:
         self,
         *,
         resource_path: str,
+        action_name: str,
         access_token: str,
-        data: Any,
+        action_params: Optional[Dict[str,Any]] = None,
         path_keys: Optional[Dict[str, Any]] = None,
         query_params: Optional[Dict[str, Any]] = None,
         version_string: Optional[str] = None
     ) -> ActionResponse:
 
-        encoded_query_param_string = encoder.param_encode(query_params)
+        final_query_params = copy.deepcopy(
+            query_params) if query_params else {}
+        final_query_params.update({ "action": action_name })
+
+        encoded_query_param_string = encoder.param_encode(final_query_params)
+
+        request_body = action_params if action_params else {}
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.ACTION,
             resource_path=resource_path,
             path_keys=path_keys,
             encoded_query_param_string=encoded_query_param_string,
-            request_body=data,
+            request_body=request_body,
             access_token=access_token,
             version_string=version_string,
             formatter=ActionResponseFormatter

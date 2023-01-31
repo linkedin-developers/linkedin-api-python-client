@@ -9,8 +9,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from flask import Flask,redirect,request
 from dotenv import load_dotenv,find_dotenv
-from linkedin_api_client.auth_client.client import AuthClient
-from linkedin_api_client.restli_client.client import RestliClient
+from linkedin_api.clients.auth.client import AuthClient
+from linkedin_api.clients.restli.client import RestliClient
 
 load_dotenv(find_dotenv())
 
@@ -34,7 +34,7 @@ def main():
     return restli_client.get(
       resource_path="/me",
       access_token=access_token
-    )
+    ).entity
 
 
 @app.route('/oauth', methods=["GET"])

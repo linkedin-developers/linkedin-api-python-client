@@ -1,7 +1,7 @@
-import linkedin_api_client.common.constants as constants
-from linkedin_api_client.utils.encoder import encode
+import linkedin_api.common.constants as constants
+from linkedin_api.clients.restli.utils.encoder import encode
 from typing import Dict, Any, Optional
-from linkedin_api_client.common.errors import InvalidArgumentError
+from linkedin_api.common.errors import InvalidArgumentError
 import re
 
 def get_rest_api_base_url(version_string):

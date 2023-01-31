@@ -1,7 +1,8 @@
 from typing import Dict, Optional, Any, Union, List, TypedDict
 from requests import Response
 from requests.structures import CaseInsensitiveDict
-from linkedin_api_client.restli_client.types import RestliEntity, EncodedEntityId
+from linkedin_api.clients.common.response import BaseResponse
+from linkedin_api.clients.restli.types import RestliEntity, EncodedEntityId
 
 
 class Paging:
@@ -10,13 +11,8 @@ class Paging:
     self.count = count
     self.total = total
 
-
-class BaseRestliResponse:
-  def __init__(self, status_code: int, headers: CaseInsensitiveDict[str], url: str, response: Response):
-    self.status_code = status_code
-    self.response = response
-    self.headers = headers
-    self.url = url
+class BaseRestliResponse(BaseResponse):
+  pass
 
 class GetResponse(BaseRestliResponse):
   def __init__(

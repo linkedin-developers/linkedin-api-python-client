@@ -1,8 +1,8 @@
 
 # Sets the path to locate local linkedin_api_client module
 from dotenv import load_dotenv, find_dotenv
-from linkedin_api_client.restli_client.client import RestliClient
-from linkedin_api_client.restli_client.response import CollectionResponse
+from linkedin_api.restli_client.client import RestliClient
+from linkedin_api.restli_client.response import CollectionResponse
 import json
 import os
 import sys

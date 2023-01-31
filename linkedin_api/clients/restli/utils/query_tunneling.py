@@ -1,6 +1,6 @@
 import requests
-from linkedin_api_client.common.constants import RESTLI_METHODS, CONTENT_TYPE, HTTP_METHODS, RESTLI_METHOD_TO_HTTP_METHOD_MAP, HEADERS
-import linkedin_api_client.utils.api as apiutils
+from linkedin_api.common.constants import RESTLI_METHODS, CONTENT_TYPE, HTTP_METHODS, RESTLI_METHOD_TO_HTTP_METHOD_MAP, HEADERS
+import linkedin_api.clients.restli.utils.api as apiutils
 import random
 import string
 import json
