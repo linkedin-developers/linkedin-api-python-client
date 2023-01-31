@@ -35,7 +35,7 @@ This library helps reduce this complexity by formatting requests correctly, prov
       - [batch\_get()](#batch_get-resource_path-ids-access_token-path_keysnone-query_paramsnone-version_stringnone)
       - [get\_all()](#get_all-resource_path-access_token-path_keysnone-query_paramsnone-version_stringnone)
       - [finder()](#finder-resource_path-finder_name-access_token-path_keysnone-query_paramsnone-version_stringnone)
-      - [batch\_finder()](#batch_finder-resource_path-finder_name-finder_criteria-access_tokien-path_keysnone-query_paramsnone-version_stringnone)
+      - [batch\_finder()](#batch_finder-resource_path-finder_name-finder_criteria-access_token-path_keysnone-query_paramsnone-version_stringnone)
       - [create()](#create-resource_path-entity-access_token-path_keysnone-query_paramsnone-version_stringnone)
       - [batch\_create()](#batch_create-resource_path-entities-access_token-path_keysnone-query_paramsnone-version_stringnone)
       - [update()](#update-resource_path-entity-access_token-path_keysnone-query_paramsnone-version_stringnone)
@@ -49,18 +49,17 @@ This library helps reduce this complexity by formatting requests correctly, prov
     - [Constructor](#constructor-1)
     - [Properties](#properties-1)
     - [Methods](#methods-1)
-      - [generate\_member\_auth\_url()](#generate_member_auth_urlscopes-statenone)
-      - [exchange\_auth\_code\_for\_access\_token()](#exchange_auth_code_for_access_tokencode-str)
-      - [exchange\_refresh\_token\_for\_access\_token()](#exchange_refresh_token_for_access_tokenrefresh_token)
-      - [get\_two\_legged\_access\_token()](#get_two_legged_access_token)
-      - [introspect\_access\_token()](#introspect_access_tokenaccess_token)
+      - [generate\_member\_auth\_url()](#generate_member_auth_url-scopes-statenone)
+      - [exchange\_auth\_code\_for\_access\_token()](#exchange_auth_code_for_access_token-code)
+      - [exchange\_refresh\_token\_for\_access\_token()](#exchange_refresh_token_for_access_token-refresh_token)
+      - [get\_two\_legged\_access\_token()](#get_two_legged_access_token-)
+      - [introspect\_access\_token()](#introspect_access_token-access_token)
 - [List of dependencies](#list-of-dependencies)
-
 
 
 # Requirements
 
-- Python >= 3.5
+- Python >= 3.7
 
 
 # Installation
@@ -177,15 +176,15 @@ All Rest.li request methods of the API client support the following request para
 
 Makes a Rest.li GET request to fetch the specified entity on a resource. This method will perform query tunneling if necessary.
 
-**Parameters:**
+***Parameters:***
 
 This method only uses the [base request parameters](#base-request-parameters) defined above.
 
-**Response:**
+***Response:***
 
 Returns [GetResponse](#class-getresponse) object
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.get(
@@ -203,7 +202,7 @@ ad_account = response.entity
 
 Makes a Rest.li BATCH_GET request to fetch multiple entities on a resource. This method will perform query tunneling if necessary.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -211,12 +210,12 @@ The additional parameters besides the [base request parameters](#base-request-pa
 |---|---|---|---|
 | `ids` | List[Union[str,int,Dict[str,Any]]] | Yes | The list of entity ids to fetch on the resource. These will be encoded and added to the query parameters. |
 
-**Response:**
+***Response:***
 
 Returns a [BatchGetResponse](#class-batchgetresponse) object.
 
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.batch_get(
@@ -233,15 +232,15 @@ campaign_groups = response.resultsMap.items()
 
 Makes a Rest.li GET_ALL request to fetch all entities on a resource.
 
-**Parameters:**
+***Parameters:***
 
 This method only uses the [base request parameters](#base-request-parameters) defined above.
 
-**Response:**
+***Response:***
 
 Returns [CollectionResponse](#class-collectionresponse) object
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.get_all(
@@ -261,7 +260,7 @@ total = response.paging.total
 
 Makes a Rest.li FINDER request to find entities by some specified criteria.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -269,11 +268,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 |---|---|---|---|
 | `finder_name` | str | Yes | The Rest.li finder name. This will be added to the request query parameters. |
 
-**Response:**
+***Response:***
 
 Returns a [CollectionResponse](#class-collectionresponse) object.
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.finder(
@@ -303,7 +302,7 @@ total = response.paging.total
 
 Makes a Rest.li BATCH_FINDER request to find entities by multiple sets of criteria.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -312,11 +311,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 | `finder_name` | str | Yes | The Rest.li batch finder name (the value of the "bq" query parameter). This will be added to the request query parameters. |
 | `finder_criteria` | Tuple[str, List[Dict[str,Any]]] | Yes | The required batch finder criteria information. This is a tuple with the first value being the batch finder criteria parameter name. The second value is the list of finder param objects. The batch finder results are correspondingly ordered according to this list. The batch finder criteria will be encoded and added to the request query parameters. |
 
-**Response:**
+***Response:***
 
 Returns a [BatchFinderResponse](#class-collectionresponse) object.
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.batch_finder(
@@ -346,7 +345,7 @@ organic_share_delete_authorizations = response.results[1].elements
 
 Makes a Rest.li CREATE request to create a new resource entity.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -354,11 +353,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 |---|---|---|---|
 | `entity` | Dict[str,Any] | Yes | A dictionary representation of the entity to create |
 
-**Response:**
+***Response:***
 
 Returns a [CreateResponse](#class-createresponse) object.
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.create(
@@ -377,7 +376,7 @@ created_entity_id = response.entity_id
 
 Makes a Rest.li BATCH_CREATE request to create multiple entities in a single call.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -385,11 +384,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 |---|---|---|---|
 | `entities` | List[Dict[str,Any]] | Yes | A list of entities to create |
 
-**Response:**
+***Response:***
 
 Returns a [BatchCreateResponse](#class-batchcreateresponse) object.
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.batch_create(
@@ -417,7 +416,7 @@ first_created_element_id = response.elements[0].id
 
 Makes a Rest.li UPDATE request to update an entity (overwriting the entity with the provided value).
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -425,11 +424,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 |---|---|---|---|
 | `entity` | Dict[str,Any] | Yes | The value of the updated entity. This will completely overwrite the entity. |
 
-**Response:**
+***Response:***
 
 Returns a [UpdateResponse](#class-updateresponse) object.
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.update(
@@ -455,7 +454,7 @@ status = response.status_code
 
 Makes a Rest.li BATCH_UPDATE request to update multiple entities in a single call.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -464,11 +463,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 | `ids` | List[Union[str,int,Dict[str,Any]]] | Yes | The ids of the entities to update |
 | `entities` | List[Dict[str,Any]] | Yes | The values to update the specified entities to. This should be the same order as the `ids` argument. |
 
-**Response:**
+***Response:***
 
 Returns a [BatchUpdateResponse](#class-batchupdateresponse) object.
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.batch_update(
@@ -493,7 +492,7 @@ Makes a Rest.li PARTIAL_UPDATE request to update part of an entity. Directly spe
 
 Note: While the Rest.li protocol supports very granular patch objects with setting and deletion of nested properties, most LinkedIn APIs only support partial update on the top-level fields of an entity.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -501,11 +500,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 |---|---|---|---|
 | `patch_set_object` | Dict[str,Any] | Yes | The value of the entity with only the modified fields present. This will be sent directly in the request body as `patch: { $set: patch_set_object }`. |
 
-**Response:**
+***Response:***
 
 Returns a [UpdateResponse](#class-updateresponse) object.
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.partial_update(
@@ -525,7 +524,7 @@ status = response.status_code
 
 Makes a Rest.li BATCH_PARTIAL_UPDATE request to update multiple entities at once, by only providing the fields of the entities that require updating.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -534,11 +533,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 | `ids` | List[Union[str,int,Dict[str,Any]]] | Yes | The list of entity ids to update. These will be encoded and added to the query parameters. |
 | `patch_set_objects` | List[Dict[str,Any]] | Yes | The list of entity values, represented as a dictionary, with only the modified fields present. |
 
-**Response:**
+***Response:***
 
 Returns a [BatchUpdateResponse](#class-batchupdateresponse) object.
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.batch_partial_update(
@@ -563,15 +562,15 @@ result_status = response.results[123].status
 
 Makes a Rest.li DELETE request to delete an entity.
 
-**Parameters:**
+***Parameters:***
 
 This method only uses the [base request parameters](#base-request-parameters) defined above.
 
-**Response:**
+***Response:***
 
 Returns [BaseRestliResponse](#class-baserestliresponse) object
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.delete(
@@ -587,7 +586,7 @@ status_code = response.status_code
 
 Makes a Rest.li BATCH_DELETE request to delete multiple entities at once.
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -595,11 +594,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 |---|---|---|---|
 | `ids` | List[Union[str,int,Dict[str,Any]]] | Yes | The list of entity ids to delete. These will be encoded and added to the query parameters. |
 
-**Response:**
+***Response:***
 
 Returns [BaseRestliResponse](#class-baserestliresponse) object
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.batch_delete(
@@ -615,7 +614,7 @@ status_code = response.status_code
 
 Makes a Rest.li ACTION request to perform an action on a specified resource. Generally this method is used when there are side effects
 
-**Parameters:**
+***Parameters:***
 
 The additional parameters besides the [base request parameters](#base-request-parameters) are:
 
@@ -624,11 +623,11 @@ The additional parameters besides the [base request parameters](#base-request-pa
 | `action_name` | str | Yes | The action method name. This will be added to the query parameters. |
 | `action_params` | Dict[str,Any] | No | An optional map of action parameters and their values. This will be sent in the request body. |
 
-**Response:**
+***Response:***
 
 Returns [ActionResponse](#class-actionresponse) object
 
-**Example:**
+***Example:***
 
 ```python
 response = restli_client.action(
@@ -811,11 +810,11 @@ auth_client = AuthClient(client_id=MY_CLIENT_ID, client_secret=MY_CLIENT_SECRET,
 
 ### Methods
 
-#### generate_member_auth_url(scopes, state=None)
+#### generate_member_auth_url *(scopes, state=None)*
 
 Generates the member authorization URL to direct members to. Once redirected, the member will be presented with LinkedIn's OAuth consent page showing the OAuth scopes your application is requesting on behalf of the user.
 
-**Parameters:**
+***Parameters:***
 
 | Parameter | Type | Required? | Description |
 |---|---|---|---|
@@ -824,11 +823,11 @@ Generates the member authorization URL to direct members to. Once redirected, th
 
 **Returns** the member authorization URL
 
-#### exchange_auth_code_for_access_token(code)
+#### exchange_auth_code_for_access_token *(code)*
 
 Exchanges an authorization code for a 3-legged access token. After member authorization, the browser redirects to the provided redirect URL, setting the authorization code on the `code` query parameter.
 
-**Parameters:**
+***Parameters:***
 
 | Parameter | Type | Required? | Description |
 |---|---|---|---|
@@ -836,11 +835,11 @@ Exchanges an authorization code for a 3-legged access token. After member author
 
 **Returns** an [AccessToken3LResponse](#class-accesstoken3lresponse)
 
-#### exchange_refresh_token_for_access_token(refresh_token)
+#### exchange_refresh_token_for_access_token *(refresh_token)*
 
 Exchanges a refresh token for a new 3-legged access token. This allows access tokens to be refreshed without having the member reauthorize your application.
 
-**Parameters:**
+***Parameters:***
 
 | Parameter | Type | Required? | Description |
 |---|---|---|---|
@@ -848,21 +847,21 @@ Exchanges a refresh token for a new 3-legged access token. This allows access to
 
 **Returns** an [RefreshTokenExchangeResponse](#class-refreshtokenexchangeresponse)
 
-#### get_two_legged_access_token()
+#### get_two_legged_access_token *()*
 
 Use client credential flow (2-legged OAuth) to retrieve a 2-legged access token for accessing APIs that are not member-specific. Developer applications do not have the client credential flow enabled by default.
 
-**Parameters:**
+***Parameters:***
 
 None
 
 **Returns** [AccessToken2LResponse](#class-accesstoken2lresponse)
 
-#### introspect_access_token(access_token)
+#### introspect_access_token *(access_token)*
 
 Introspect a 2-legged, 3-legged or Enterprise access token to get information on status, expiry, and other details.
 
-**Parameters:**
+***Parameters:***
 
 | Parameter | Type | Required? | Description |
 |---|---|---|---|
