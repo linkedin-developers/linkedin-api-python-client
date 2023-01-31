@@ -2,15 +2,17 @@
 import os,sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from linkedin_api.restli_client import RestliClient
+from linkedin_api.clients.restli.client import RestliClient
 from dotenv import load_dotenv,find_dotenv
 
 load_dotenv(find_dotenv())
 
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 
-r = RestliClient.finder(
-  resource='/adAccountsV2',
+restli_client = RestliClient()
+
+r = restli_client.finder(
+  resource_path='/adAccountsV2',
   finder_name='search',
   query_params={
     "search": {

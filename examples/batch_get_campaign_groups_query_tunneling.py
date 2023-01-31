@@ -9,7 +9,7 @@ is part of the Marketing Developer Platform API product.
 import os,sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from linkedin_api.restli_client.client import RestliClient
+from linkedin_api.clients.restli.client import RestliClient
 import random
 from dotenv import load_dotenv,find_dotenv
 from requests.exceptions import HTTPError
