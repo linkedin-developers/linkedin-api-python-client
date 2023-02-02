@@ -38,14 +38,14 @@ class BatchGetResponse(BaseRestliResponse):
     url: str,
     headers: CaseInsensitiveDict[str],
     response: Response,
-    resultsMap: Dict[EncodedEntityId, RestliEntity],
-    statusesMap: Dict[EncodedEntityId, int],
-    errorsMap: Dict[EncodedEntityId, Any]
+    results: Dict[EncodedEntityId, RestliEntity],
+    statuses: Dict[EncodedEntityId, int],
+    errors: Dict[EncodedEntityId, Any]
   ):
     super().__init__(status_code=status_code, headers=headers, url=url, response=response)
-    self.resultsMap = resultsMap
-    self.statusesMap = statusesMap
-    self.errorsMap = errorsMap
+    self.results = results
+    self.statuses = statuses
+    self.errors = errors
 
 class CollectionResponse(BaseRestliResponse):
   def __init__(

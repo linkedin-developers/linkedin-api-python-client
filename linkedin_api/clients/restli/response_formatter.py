@@ -28,9 +28,9 @@ class BatchGetResponseFormatter(BaseResponseFormatter[BatchGetResponse]):
       url=response.url,
       headers=response.headers,
       response=response,
-      resultsMap=getattr(json_data, "results", None),
-      statusesMap=getattr(json_data, "statuses", None),
-      errorsMap=getattr(json_data, "errors", None)
+      results=json_data.get("results", None),
+      statuses=json_data.get("statuses", None),
+      errors=json_data.get("errors", None)
     )
 
 class CollectionResponseFormatter(BaseResponseFormatter[CollectionResponse]):
@@ -38,19 +38,19 @@ class CollectionResponseFormatter(BaseResponseFormatter[CollectionResponse]):
   @wrap_format_exception
   def format_response(cls, response: Response) -> CollectionResponse:
     json_data = response.json()
-    paging = getattr(json_data, "paging", None)
+    paging = json_data.get("paging", None)
 
     return CollectionResponse(
       status_code=response.status_code,
       url=response.url,
       headers=response.headers,
       response=response,
-      elements=getattr(json_data, "elements", None),
+      elements=json_data.get("elements", None),
       paging=Paging(
-        getattr(paging, "start", None),
-        getattr(paging, "count", None),
-        getattr(paging, "total", None)
-      ),
+        paging.get("start", None),
+        paging.get("count", None),
+        paging.get("total", None)
+      ) if paging else None,
       metadata=getattr(json_data, "metadata", None)
     )
 
