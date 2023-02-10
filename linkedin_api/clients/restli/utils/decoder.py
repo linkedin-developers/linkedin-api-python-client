@@ -1,3 +1,4 @@
 
-def reduced_decode():
-  pass
+def reduced_decode(value):
+  # TODO
+  return value

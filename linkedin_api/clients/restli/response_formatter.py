@@ -59,7 +59,7 @@ class BatchFinderResponseFormatter(BaseResponseFormatter[BatchFinderResponse]):
   @wrap_format_exception
   def format_response(cls, response: Response) -> BatchFinderResponse:
     json_data = response.json()
-    elements = getattr(json_data, "elements", None)
+    elements = json_data.get("elements", None)
     finder_results = [ cls.format_finder_result(result) for result in elements ] if elements else None
 
     return BatchFinderResponse(
@@ -72,27 +72,31 @@ class BatchFinderResponseFormatter(BaseResponseFormatter[BatchFinderResponse]):
 
   @classmethod
   @wrap_format_exception
-  def format_finder_result(cls, result) -> BatchFinderResult:
+  def format_finder_result(cls, result: Dict) -> BatchFinderResult:
     return BatchFinderResult(
-      getattr(result, "elements", None),
-      getattr(result, "paging", None),
-      getattr(result, "metadata", None),
-      getattr(result, "error", None),
-      getattr(result, "isError", None)
+      result.get("elements", None),
+      result.get("paging", None),
+      result.get("metadata", None),
+      result.get("error", None),
+      result.get("isError", False)
     )
 
 class CreateResponseFormatter(BaseResponseFormatter[CreateResponse]):
   @classmethod
   @wrap_format_exception
   def format_response(cls, response: Response) -> CreateResponse:
-    json_data = response.json()
+    try:
+      json_data = response.json()
+    except ValueError:
+      # Handle case of no entity returned in the response
+      json_data = None
 
     return CreateResponse(
       status_code=response.status_code,
       url=response.url,
       headers=response.headers,
       response=response,
-      entityId=get_created_entity_id(response, True),
+      entity_id=get_created_entity_id(response, True),
       entity=json_data if json_data else None
     )
 
@@ -101,7 +105,7 @@ class BatchCreateResponseFormatter(BaseResponseFormatter[BatchCreateResponse]):
   @wrap_format_exception
   def format_response(cls, response: Response) -> BatchCreateResponse:
     json_data = response.json()
-    elements = getattr(json_data, "elements", None)
+    elements = json_data.get("elements", None)
     batch_create_results = [ cls.format_batch_create_result(result) for result in elements ]
 
     return BatchCreateResponse(
@@ -116,16 +120,19 @@ class BatchCreateResponseFormatter(BaseResponseFormatter[BatchCreateResponse]):
   @wrap_format_exception
   def format_batch_create_result(cls, result) -> BatchCreateResult:
     return BatchCreateResult(
-      getattr(result, "status", None),
-      getattr(result, "id", None),
-      getattr(result, "error", None)
+      result.get("status", None),
+      result.get("id", None),
+      result.get("error", None)
     )
 
 class UpdateResponseFormatter(BaseResponseFormatter[UpdateResponse]):
   @classmethod
   @wrap_format_exception
   def format_response(cls, response: Response) -> UpdateResponse:
-    json_data = response.json()
+    try:
+      json_data = response.json()
+    except ValueError:
+      json_data = None
 
     return UpdateResponse(
       status_code=response.status_code,
@@ -140,9 +147,11 @@ class BatchUpdateResponseFormatter(BaseResponseFormatter[BatchUpdateResponse]):
   @wrap_format_exception
   def format_response(cls, response: Response) -> BatchUpdateResponse:
     json_data = response.json()
-    results = getattr(json_data, "results", None)
+    results = json_data.get("results", None)
     if results is not None:
       batch_update_results = { encoded_id:cls.format_batch_update_result(result) for (encoded_id, result) in results.items() }
+    else:
+      batch_update_results = None
 
     return BatchUpdateResponse(
       status_code=response.status_code,
@@ -156,7 +165,7 @@ class BatchUpdateResponseFormatter(BaseResponseFormatter[BatchUpdateResponse]):
   @wrap_format_exception
   def format_batch_update_result(cls, result) -> BatchUpdateResult:
     return BatchUpdateResult(
-      status=getattr(result, "status")
+      status=result.get("status", None)
     )
 
 class DeleteResponseFormatter(BaseResponseFormatter[BaseRestliResponse]):
@@ -175,7 +184,7 @@ class BatchDeleteResponseFormatter(BaseResponseFormatter[BatchDeleteResponse]):
   @wrap_format_exception
   def format_response(cls, response: Response) -> BatchDeleteResponse:
     json_data = response.json()
-    results = getattr(json_data, "results", None)
+    results = json_data.get("results", None)
     if results is not None:
       batch_delete_results = { encoded_id:cls.format_batch_delete_result(result) for (encoded_id, result) in results.items() }
 
@@ -191,7 +200,7 @@ class BatchDeleteResponseFormatter(BaseResponseFormatter[BatchDeleteResponse]):
   @wrap_format_exception
   def format_batch_delete_result(cls, result) -> BatchDeleteResult:
     return BatchDeleteResult(
-      status=getattr(result, "status")
+      status=result.get("status", None)
     )
 
 class ActionResponseFormatter(BaseResponseFormatter[ActionResponse]):
@@ -205,5 +214,5 @@ class ActionResponseFormatter(BaseResponseFormatter[ActionResponse]):
       url=response.url,
       headers=response.headers,
       response=response,
-      value=getattr(json_data, "value", None)
+      value=json_data.get("value", None)
     )

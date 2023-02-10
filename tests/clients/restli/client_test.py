@@ -1,3 +1,4 @@
+import json
 from linkedin_api.clients.restli.client import RestliClient
 import pytest
 import responses
@@ -306,46 +307,552 @@ the input request options and method type and expected response.
         #
         # FINDER Method
         #
+        (
+            # Finder request on a non-versioned collection resource
+            RESTLI_METHODS.FINDER,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "finder_name": "search",
+                "query_params": {
+                    "search": {
+                        "ids": {
+                            "values": ["urn:li:entity:123", "urn:li:entity:456"]
+                        }
+                    }
+                },
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": {
+                    "elements": [{"name": "A"}, {"name": "B"}],
+                    "paging": {"start": 0, "count": 2, "total": 10}
+                },
+                "status": 200
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource?q=search&search=(ids:(values:List(urn%3Ali%3Aentity%3A123,urn%3Ali%3Aentity%3A456)))",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.FINDER.value
+                },
+                "response_properties": {
+                    "elements": [{"name": "A"}, {"name": "B"}],
+                    "paging": {"start": 0, "count": 2, "total": 10}
+                }
+            }
+        ),
 
         #
         # BATCH_FINDER Method
         #
+        (
+            # Batch finder request on a non-versioned collection resource
+            RESTLI_METHODS.BATCH_FINDER,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "finder_name": "authActions",
+                "finder_criteria": (
+                    "authActionsCriteria",
+                    [
+                        {
+                            "OrgRoleAuthAction": {
+                                "actionType": 'ADMIN_READ'
+                            }
+                        },
+                        {
+                            "OrgContentAuthAction": {
+                                "actionType": 'ORGANIC_SHARE_DELETE'
+                            }
+                        }
+                    ]
+                ),
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": {
+                    "elements": [{ "elements": [] }, { "elements": [] }]
+                },
+                "status": 200
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource?authActionsCriteria=List((OrgRoleAuthAction:(actionType:ADMIN_READ)),(OrgContentAuthAction:(actionType:ORGANIC_SHARE_DELETE)))&bq=authActions",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.BATCH_FINDER.value
+                },
+                "response_properties": {
+                    "results": [
+                        { "elements": [], "paging": None, "metadata": None, "error": None, "isError": False },
+                        { "elements": [], "paging": None, "metadata": None, "error": None, "isError": False }
+                    ]
+                }
+            }
+        ),
 
         #
         # CREATE Method
         #
+        (
+            # Create request on a non-versioned collection resource, with no entity returned
+            RESTLI_METHODS.CREATE,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "entity": {
+                    "name": "TestApp1"
+                },
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": None,
+                "status": 201,
+                "headers": {
+                    "x-restli-id": "123"
+                }
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.CREATE.value
+                },
+                "response_properties": {
+                    "entity_id": "123",
+                    "entity": None
+                }
+            }
+        ),
+        (
+            # Create request on a non-versioned collection resource, with entity returned
+            RESTLI_METHODS.CREATE,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "entity": {
+                    "name": "TestApp1"
+                },
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": { "name": "TestApp1", "reference": "foobar123" },
+                "status": 201,
+                "headers": {
+                    "x-restli-id": "123"
+                }
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.CREATE.value
+                },
+                "response_properties": {
+                    "entity_id": "123",
+                    "entity": { "name": "TestApp1", "reference": "foobar123" }
+                }
+            }
+        ),
 
         #
         # BATCH_CREATE Method
         #
+        (
+            # Create request on a non-versioned collection resource, with entity returned
+            RESTLI_METHODS.BATCH_CREATE,
+            {
+                # request_args
+                "resource_path": "/adCampaignGroups",
+                "entities": [
+                    {
+                        "account": "urn:li:sponsoredAccount:111",
+                        "name": "Test1"
+                    },
+                    {
+                        "account": "urn:li:sponsoredAccount:222",
+                        "name": "Test2"
+                    }
+                ],
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": {
+                    "elements": [
+                        { "status": 201, "id": 123 },
+                        { "status": 400, "error": "Unknown account" }
+                    ]
+                },
+                "status": 200
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/adCampaignGroups",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.BATCH_CREATE.value
+                },
+                "response_properties": {
+                    "elements": [
+                        { "status": 201, "id": 123, "error": None },
+                        { "status": 400, "id": None, "error": "Unknown account" }
+                    ]
+                }
+            }
+        ),
 
         #
         # PARTIAL_UPDATE Method
         #
+        (
+            # Partial update request on a non-versioned collection resource
+            RESTLI_METHODS.PARTIAL_UPDATE,
+            {
+                # request_args
+                "resource_path": "/testResource/{id}",
+                "path_keys": {
+                    "id": 123
+                },
+                "patch_set_object": {
+                    "description": "modified description"
+                },
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": None,
+                "status": 201
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource/123",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.PARTIAL_UPDATE.value
+                },
+                "request_body": {
+                    "type": "json",
+                    "value": {
+                        "patch": {
+                            "$set": {
+                                "description": "modified description"
+                            }
+                        }
+                    }
+                }
+            }
+        ),
 
         #
         # BATCH_PARTIAL_UPDATE Method
         #
+        (
+            # Batch partial update request on a non-versioned collection resource
+            RESTLI_METHODS.BATCH_PARTIAL_UPDATE,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "ids": ["urn:li:person:123", "urn:li:person:456"],
+                "patch_set_objects": [
+                    {
+                        "name": "Steven",
+                        "description": "foobar"
+                    },
+                    {
+                        "prop1": 123
+                    }
+                ],
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": {
+                    "results": {
+                        "urn%3Ali%3Aperson%3A123": { "status": 204 },
+                        "urn%3Ali%3Aperson%3A456": { "status": 204 }
+                    }
+                },
+                "status": 200
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource?ids=List(urn%3Ali%3Aperson%3A123,urn%3Ali%3Aperson%3A456)",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.BATCH_PARTIAL_UPDATE.value
+                },
+                "request_body": {
+                    "type": "json",
+                    "value": {
+                        "entities": {
+                            "urn%3Ali%3Aperson%3A123": {
+                                "patch": {
+                                    "$set": {
+                                        "name": 'Steven',
+                                        "description": 'foobar'
+                                    }
+                                }
+                            },
+                            "urn%3Ali%3Aperson%3A456": {
+                                "patch": {
+                                    "$set": {
+                                        "prop1": 123
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "response_properties": {
+                    "results": {
+                        "urn%3Ali%3Aperson%3A123": { "status": 204 },
+                        "urn%3Ali%3Aperson%3A456": { "status": 204 }
+                    }
+                }
+            }
+        ),
 
         #
         # UPDATE Method
         #
+        (
+            # Update a versioned, association resource
+            RESTLI_METHODS.UPDATE,
+            {
+                # request_args
+                "resource_path": "/testResource/{key}",
+                "path_keys": {
+                    "key": {
+                        "application": "urn:li:developerApplication:123",
+                        "member": "urn:li:member:456"
+                    }
+                },
+                "entity": {
+                    "name": "Steven",
+                    "description": "foobar"
+                },
+                "version_string": "202210",
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": None,
+                "status": 204
+            },
+            {
+                # expected_values
+                "base_url": VERSIONED_BASE_URL,
+                "path": "/testResource/(application:urn%3Ali%3AdeveloperApplication%3A123,member:urn%3Ali%3Amember%3A456)",
+                "checked_headers": {
+                    "LinkedIn-Version": "202210",
+                    "X-RestLi-Method": RESTLI_METHODS.UPDATE.value
+                },
+                "request_body": {
+                    "type": "json",
+                    "value": {
+                        "name": "Steven",
+                        "description": "foobar"
+                    }
+                }
+            }
+        ),
 
         #
         # BATCH_UPDATE Method
         #
+        (
+            # Batch update on versioned resource
+            RESTLI_METHODS.BATCH_UPDATE,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "ids": [
+                    {
+                        "application": "urn:li:developerApplication:123",
+                        "member": "urn:li:member:321"
+                    },
+                    {
+                        "application": "urn:li:developerApplication:789",
+                        "member": "urn:li:member:987"
+                    }
+                    ],
+                "entities": [
+                    {
+                        "name": "foobar"
+                    },
+                    {
+                        "name": "barbaz"
+                    }
+                ],
+                "version_string": "202303",
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": {
+                    "results": {
+                        "(application:urn%3Ali%3AdeveloperApplication%3A123,member:urn%3Ali%3Amember%3A321)": { "status": 204 },
+                        "(application:urn%3Ali%3AdeveloperApplication%3A789,member:urn%3Ali%3Amember%3A987)": { "status": 204 }
+                    }
+                },
+                "status": 200
+            },
+            {
+                # expected_values
+                "base_url": VERSIONED_BASE_URL,
+                "path": "/testResource?ids=List((application:urn%3Ali%3AdeveloperApplication%3A123,member:urn%3Ali%3Amember%3A321),(application:urn%3Ali%3AdeveloperApplication%3A789,member:urn%3Ali%3Amember%3A987))",
+                "checked_headers": {
+                    "LinkedIn-Version": "202303",
+                    "X-RestLi-Method": RESTLI_METHODS.BATCH_UPDATE.value
+                },
+                "request_body": {
+                    "type": "json",
+                    "value": {
+                        "entities": {
+                            "(application:urn%3Ali%3AdeveloperApplication%3A123,member:urn%3Ali%3Amember%3A321)": {
+                                "name": "foobar"
+                            },
+                            "(application:urn%3Ali%3AdeveloperApplication%3A789,member:urn%3Ali%3Amember%3A987)": {
+                                "name": "barbaz"
+                            }
+                        }
+                    }
+                },
+                "response_properties": {
+                    "results": {
+                        "(application:urn%3Ali%3AdeveloperApplication%3A123,member:urn%3Ali%3Amember%3A321)": { "status": 204 },
+                        "(application:urn%3Ali%3AdeveloperApplication%3A789,member:urn%3Ali%3Amember%3A987)": { "status": 204 }
+                    }
+                }
+            }
+        ),
 
         #
         # DELETE Method
         #
+        (
+            # Delete on a non-versioned collection resource
+            RESTLI_METHODS.DELETE,
+            {
+                # request_args
+                "resource_path": "/testResource/{id}",
+                "path_keys": {
+                    "id": 123
+                },
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": None,
+                "status": 204
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource/123",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.DELETE.value
+                },
+                "response_properties": {
+                    "status_code": 204
+                }
+            }
+        ),
 
         #
         # BATCH_DELETE Method
         #
+        (
+            # Batch delete on a non-versioned collection resource
+            RESTLI_METHODS.BATCH_DELETE,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "ids": ["urn:li:member:123", "urn:li:member:456"],
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": {
+                    "results": {
+                        "urn%3Ali%3Amember%3A123": { "status": 204 },
+                        "urn%3Ali%3Amember%3A456": { "status": 204 }
+                    }
+                },
+                "status": 200
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource?ids=List(urn%3Ali%3Amember%3A123,urn%3Ali%3Amember%3A456)",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.BATCH_DELETE.value
+                },
+                "response_properties": {
+                    "results": {
+                        "urn%3Ali%3Amember%3A123": { "status": 204 },
+                        "urn%3Ali%3Amember%3A456": { "status": 204 }
+                    }
+                }
+            }
+        ),
 
         #
         # ACTION Method
         #
+        (
+            # Action on a non-versioned collection resource
+            RESTLI_METHODS.ACTION,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "action_name": "doSomething",
+                "action_params": {
+                    "actionParam1": 123,
+                    "actionParam2": "foobar"
+                },
+                "access_token": ACCESS_TOKEN
+            },
+            {
+                # input_response
+                "json": {
+                    "value": {
+                        "result": "I did it!"
+                    }
+                },
+                "status": 200
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource?action=doSomething",
+                "checked_headers": {
+                    "X-RestLi-Method": RESTLI_METHODS.ACTION.value
+                },
+                "request_body": {
+                    "type": "json",
+                    "value": {
+                        "actionParam1": 123,
+                        "actionParam2": "foobar"
+                    }
+                },
+                "response_properties": {
+                    "status_code": 200,
+                    "value": {
+                        "result": "I did it!"
+                    }
+                }
+            }
+        ),
     ]
 )
 @responses.activate
@@ -379,8 +886,10 @@ def test_restliclient(
     requests_stub_args = {
         "url": expected_url_no_params,
         "json": input_response["json"],
-        "status": input_response["status"]
+        "status": input_response["status"],
+        "headers": input_response.get("headers", {})
     }
+
     if request_matchers:
         # Require matching any provided headers
         requests_stub_args.update({"match": request_matchers})
@@ -400,13 +909,15 @@ def test_restliclient(
     responses.assert_call_count(expected_full_url, 1)
     assert response.status_code == input_response["status"]
 
-    # Verify the response_properties, if provided
+    # Verify the provided response_properties.
+    # This will check the desired subset of the properties on the actual response.
     response_properties = expected_values.get("response_properties", None)
     if response_properties:
         for key in response_properties.keys():
-            try:
-                actual_response_property = vars(getattr(response, key))
-            except TypeError:
-                actual_response_property = getattr(response, key)
-
+            # Convert response attribute to a dictionary for comparison
+            actual_response_property = to_dict(getattr(response, key))
             assert actual_response_property == response_properties.get(key)
+
+
+def to_dict(obj):
+    return json.loads(json.dumps(obj, default=lambda o: o.__dict__))

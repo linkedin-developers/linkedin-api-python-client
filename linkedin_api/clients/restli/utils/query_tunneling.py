@@ -88,6 +88,7 @@ def maybe_apply_query_tunneling_requests_with_body(*,
         request = requests.Request(
             method=original_http_method,
             url=final_url,
+            json=original_request_body,
             headers=apiutils.get_restli_request_headers(
                 restli_method=original_restli_method,
                 access_token=access_token,
