@@ -289,10 +289,13 @@ class RestliClient:
         final_query_params.update({"ids": ids})
         encoded_query_param_string = encoder.param_encode(final_query_params)
 
-        entities_map = dict(zip(ids, patch_set_objects))
-        request_body = {
+        id_to_patch_map = dict(zip(ids, patch_set_objects))
+        entities_map = {
             encoder.encode(id): {"patch": {"$set": patch_set_object}}
-            for (id, patch_set_object) in entities_map.items()}
+            for (id, patch_set_object) in id_to_patch_map.items()}
+        request_body = {
+            "entities": entities_map
+        }
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.BATCH_PARTIAL_UPDATE,

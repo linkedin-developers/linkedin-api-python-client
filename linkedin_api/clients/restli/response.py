@@ -138,7 +138,7 @@ class BatchUpdateResponse(BaseRestliResponse):
     url: str,
     headers: CaseInsensitiveDict[str],
     response: Response,
-    results: Dict[EncodedEntityId, BatchUpdateResult]
+    results: Optional[Dict[EncodedEntityId, BatchUpdateResult]]
   ):
     super().__init__(status_code=status_code, headers=headers, url=url, response=response)
     self.results = results
