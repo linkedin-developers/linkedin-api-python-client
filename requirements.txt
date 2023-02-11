@@ -1,5 +1,0 @@
-curlify==2.2.1
-Flask==2.2.2
-python-dotenv==0.21.1
-requests==2.28.1
-setuptools==65.6.3

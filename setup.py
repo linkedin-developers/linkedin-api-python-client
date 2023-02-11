@@ -7,6 +7,7 @@ setup(
   description='LinkedIn API Python client library',
   author='LinkedIn',
   install_requires=['requests'],
+  python_requires='>=3.7',
   setup_requires=['pytest-runner'],
   tests_require=['pytest'],
   test_suite='tests'
