@@ -37,7 +37,6 @@ try:
     version_string=API_VERSION
   )
 
-  # batchResponse.response.raise_for_status()
   # If query tunneling is used, then this will be a POST request with the query param
   # string in the request body
   print("Curl call:")
