@@ -8,14 +8,12 @@ is part of the Advertising APIs product.
 
 import os,sys
 
-from requests import Response
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from dotenv import load_dotenv,find_dotenv
 load_dotenv(find_dotenv())
 
 from linkedin_api.clients.restli.client import RestliClient
 import random
-from requests.exceptions import HTTPError
 import curlify
 
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
@@ -24,10 +22,6 @@ API_VERSION = '202302'
 
 restli_client = RestliClient()
 restli_client.session.hooks['response'].append(lambda r: r.raise_for_status())
-
-# restli_client.session.hooks = {
-#   "response": lambda r, *args, **kwargs: r.raise_for_status()
-# }
 
 # Generate a large, random list of ids
 ids_list = []
