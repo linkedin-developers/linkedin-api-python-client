@@ -6,7 +6,7 @@ from linkedin_api.clients.restli.types import RestliEntity, EncodedEntityId
 
 
 class Paging:
-  def __init__(self, start: int, count: int, total: int):
+  def __init__(self, start: Optional[int] = None, count: Optional[int] = None, total: Optional[int] = None):
     self.start = start
     self.count = count
     self.total = total
@@ -55,7 +55,7 @@ class CollectionResponse(BaseRestliResponse):
     headers: CaseInsensitiveDict[str],
     response: Response,
     elements: List[RestliEntity],
-    paging: Optional[Paging],
+    paging: Paging,
     metadata: Optional[Any]
   ):
     super().__init__(status_code=status_code, headers=headers, url=url, response=response)

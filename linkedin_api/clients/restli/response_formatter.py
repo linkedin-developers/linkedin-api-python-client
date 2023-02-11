@@ -50,7 +50,7 @@ class CollectionResponseFormatter(BaseResponseFormatter[CollectionResponse]):
         paging.get("start", None),
         paging.get("count", None),
         paging.get("total", None)
-      ) if paging else None,
+      ) if paging else Paging(),
       metadata=getattr(json_data, "metadata", None)
     )
 
