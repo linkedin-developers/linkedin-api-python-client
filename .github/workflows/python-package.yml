@@ -32,4 +32,4 @@ jobs:
         pipenv install --dev
     - name: Test with pytest
       run: |
-        pipenv run test
+        pipenv run pytest
