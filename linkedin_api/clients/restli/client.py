@@ -18,14 +18,15 @@ RestliEntityId = Union[str, int, Dict[str, Any]]
 
 T = TypeVar('T', bound=BaseRestliResponse)
 
-"""
-A client for making Rest.li API calls.
-
-Attributes:
-    session (requests.Session): The session instance used to send the API requests. Session attributes can
-    be modified, which will affect all requests.
-"""
 class RestliClient:
+    """
+    A client for making Rest.li API calls.
+
+    Attributes:
+        session (requests.Session): The session instance used to send the API requests. Session attributes can
+        be modified, which will affect all requests.
+    """
+
     def __init__(self):
         """
         The constructor for the RestliClient class.
