@@ -682,9 +682,9 @@ Base class: [BaseRestliResponse](#class-baserestliresponse)
 
 | Properties | Type | Description |
 |---|---|---|
-| `resultsMap` | Dict[str,Any] | A map of entities that were successfully retrieved, with the key being the encoded entity id, and the value being a dictionary representing the entity |
-| `statusesMap` | Dict[str,int] | A map of entities and status code, with the key being the encoded entity id, and the value being the status code number value. |
-| `errorsMap` | Dict[str,Any] | A map containing entities that could not be successfully fetched, with the key being the encoded entity id, and the value being the error response. |
+| `results` | Dict[str,Any] | A map of entities that were successfully retrieved, with the key being the encoded entity id, and the value being a dictionary representing the entity |
+| `statuses` | Dict[str,int] | A map of entities and status code, with the key being the encoded entity id, and the value being the status code number value. |
+| `errors` | Dict[str,Any] | A map containing entities that could not be successfully fetched, with the key being the encoded entity id, and the value being the error response. |
 
 #### *class CollectionResponse()*
 
