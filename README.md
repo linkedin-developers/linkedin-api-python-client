@@ -43,7 +43,7 @@ This library helps reduce this complexity by formatting requests correctly, prov
       - [partial\_update()](#partial_updateresource_path-patch_set_object-access_token-path_keysnone-query_paramsnone-version_stringnone)
       - [batch\_partial\_update()](#batch_partial_updateresource_path-ids-patch_set_objects-access_token-path_keysnone-query_paramsnone-version_stringnone)
       - [delete()](#delete-resource_path-access_token-path_keysnone-query_paramsnone-version_stringnone)
-      - [batch\_delete()](#batch_delete-resource_path-access_token-path_keysnone-query_paramsnone-version_stringnone)
+      - [batch\_delete()](#batch_delete-resource_path-ids-access_token-path_keysnone-query_paramsnone-version_stringnone)
       - [action()](#action-resource_path-action_name-access_token-action_paramsnone-path_keysnone-query_paramsnone-version_stringnone)
   - [AuthClient](#class-authclientclient_id-client_secret-redirect_urlnone)
     - [Constructor](#constructor-1)
@@ -224,7 +224,7 @@ response = restli_client.batch_get(
   access_token=MY_ACCESS_TOKEN,
   version_string="202212"
 )
-campaign_groups = response.resultsMap.items()
+campaign_groups = response.results.items()
 ```
 
 
@@ -284,13 +284,13 @@ response = restli_client.finder(
             "values": ["ACTIVE", "DRAFT", "CANCELED"]
         },
         "reference": {
-          "values": ["urn:li:organization:123"]
+            "values": ["urn:li:organization:123"]
         },
         "test": False
     },
     "start": 0,
     "count": 5
-  }
+  },
   access_token=MY_ACCESS_TOKEN,
   version_string="202212"
 )
@@ -313,7 +313,7 @@ The additional parameters besides the [base request parameters](#base-request-pa
 
 ***Response:***
 
-Returns a [BatchFinderResponse](#class-collectionresponse) object.
+Returns a [BatchFinderResponse](#class-batchfinderresponse) object.
 
 ***Example:***
 
@@ -395,14 +395,14 @@ response = restli_client.batch_create(
   resource_path="/adCampaignGroups",
   entities=[
     {
-      account: 'urn:li:sponsoredAccount:111',
-      name: 'CampaignGroupTest1',
-      status: 'DRAFT'
+        account: 'urn:li:sponsoredAccount:111',
+        name: 'CampaignGroupTest1',
+        status: 'DRAFT'
     },
     {
-      account: 'urn:li:sponsoredAccount:222',
-      name: 'CampaignGroupTest2',
-      status: 'DRAFT'
+        account: 'urn:li:sponsoredAccount:222',
+        name: 'CampaignGroupTest2',
+        status: 'DRAFT'
     }
   ],
   access_token=MY_ACCESS_TOKEN,
@@ -435,8 +435,8 @@ response = restli_client.update(
   resource_path="/adAccountUsers/{id}",
   path_keys={
     "id": {
-      "account": 'urn:li:sponsoredAccount:123',
-      "user": 'urn:li:person:foobar'
+      "account": "urn:li:sponsoredAccount:123",
+      "user": "urn:li:person:foobar"
     }
   },
   entity: {
@@ -483,7 +483,7 @@ response = restli_client.batch_update(
   access_token=MY_ACCESS_TOKEN,
   version_string="202212"
 )
-batch_results_statuses = response.results.items()
+batch_results = response.results.items()
 ```
 
 #### *partial_update(resource_path, patch_set_object, access_token, path_keys=None, query_params=None, version_string=None)*
@@ -508,7 +508,7 @@ Returns a [UpdateResponse](#class-updateresponse) object.
 
 ```python
 response = restli_client.partial_update(
-  resource_path="/adAccounts",
+  resource_path="/adAccounts/{id}",
   path_keys={ "id": 123 },
   patch_set_object: {
     "name": "TestAdAccountModified",
@@ -542,7 +542,7 @@ Returns a [BatchUpdateResponse](#class-batchupdateresponse) object.
 ```python
 response = restli_client.batch_partial_update(
   resource_path="/adCampaignGroups",
-  ids=[123, 456],
+  ids=["123", "456"],
   patch_set_objects: [
     { "status": "ACTIVE" },
     {
@@ -555,7 +555,7 @@ response = restli_client.batch_partial_update(
   access_token=MY_ACCESS_TOKEN,
   version_string="202212"
 )
-result_status = response.results[123].status
+result_status = response.results["123"].status
 ```
 
 #### delete *(resource_path, access_token, path_keys=None, query_params=None, version_string=None)*
@@ -582,7 +582,7 @@ response = restli_client.delete(
 status_code = response.status_code
 ```
 
-#### batch_delete *(resource_path, access_token, path_keys=None, query_params=None, version_string=None)*
+#### batch_delete *(resource_path, ids, access_token, path_keys=None, query_params=None, version_string=None)*
 
 Makes a Rest.li BATCH_DELETE request to delete multiple entities at once.
 
@@ -596,23 +596,23 @@ The additional parameters besides the [base request parameters](#base-request-pa
 
 ***Response:***
 
-Returns [BaseRestliResponse](#class-baserestliresponse) object
+Returns [BatchDeleteResponse](#class-batchdeleteresponse) object
 
 ***Example:***
 
 ```python
 response = restli_client.batch_delete(
-  resource_path="/adAccounts/{id}",
-  path_keys={ "id": 123 },
+  resource_path="/adAccounts",
+  ids=["123", "456"],
   access_token=MY_ACCESS_TOKEN,
   version_string="202212"
 )
-status_code = response.status_code
+status_code = response.results["123"].status
 ```
 
 #### action *(resource_path, action_name, access_token, action_params=None, path_keys=None, query_params=None, version_string=None)*
 
-Makes a Rest.li ACTION request to perform an action on a specified resource. Generally this method is used when there are side effects
+Makes a Rest.li ACTION request to perform an action on a specified resource. This method is flexible and generally used when the action does not fit within the standard behavior defined by the other Rest.li methods.
 
 ***Parameters:***
 
@@ -639,7 +639,7 @@ response = restli_client.action(
       "recipes": ["urn:li:digitalmediaRecipe:feedshare-live-video"],
       "region": "WEST_US"
     }
-  }
+  },
   access_token=MY_ACCESS_TOKEN
 )
 status_code = response.status_code
