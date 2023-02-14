@@ -24,5 +24,12 @@ auth_client = AuthClient(
 )
 
 token_response = auth_client.get_two_legged_access_token()
+access_token = token_response.access_token
 print(f"Status code: {token_response.status_code}")
-print(f"Access token: {token_response.access_token}")
+print(f"Access token: {access_token}\n")
+
+if access_token:
+  introspection_response = auth_client.introspect_access_token(access_token)
+  print("Token introspection details:")
+  print(f"Auth type: {introspection_response.auth_type}")
+  print(f"Expires at: {introspection_response.expires_at}")
