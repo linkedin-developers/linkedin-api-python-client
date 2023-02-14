@@ -20,7 +20,7 @@ T = TypeVar('T', bound=BaseRestliResponse)
 
 class RestliClient:
     """
-    A client for making Rest.li API calls.
+    A client for making Rest.li-based, LinkedIn API calls.
 
     Attributes:
         session (requests.Session): The session instance used to send the API requests. Session attributes can

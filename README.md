@@ -759,7 +759,7 @@ Base class: [BaseRestliResponse](#class-baserestliresponse)
 
 | Properties | Type | Description |
 |---|---|---|
-| `status` | int | The status code of the update call |
+| `status` | int | The status code of the individual update call |
 
 #### *class BatchDeleteResponse()*
 
