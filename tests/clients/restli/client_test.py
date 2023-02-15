@@ -1,5 +1,6 @@
 import json
 from linkedin_api.clients.restli.client import RestliClient
+from linkedin_api import __version__
 import pytest
 import responses
 from responses import matchers
@@ -43,7 +44,8 @@ the input request options and method type and expected response.
                     "Authorization": "Bearer ABC123",
                     "X-RestLi-Protocol-Version": "2.0.0",
                     "Content-Type": "application/json",
-                    "X-RestLi-Method": RESTLI_METHODS.GET.value
+                    "X-RestLi-Method": RESTLI_METHODS.GET.value,
+                    "User-Agent": f"linkedin-api-python-client/{__version__}"
                 },
                 "response_properties": {
                     "entity": {"name": "TestAdAccount"}

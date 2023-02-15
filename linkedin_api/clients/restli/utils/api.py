@@ -1,4 +1,5 @@
 import linkedin_api.common.constants as constants
+from linkedin_api import __version__
 from linkedin_api.clients.restli.utils.encoder import encode
 from typing import Dict, Any, Optional
 from linkedin_api.common.errors import InvalidArgumentError
@@ -16,7 +17,8 @@ def get_restli_request_headers(*, restli_method: constants.RESTLI_METHODS, acces
     "X-RestLi-Protocol-Version": "2.0.0",
     "X-RestLi-Method": restli_method.value,
     "Authorization": "Bearer " + access_token,
-    "Content-Type": content_type
+    "Content-Type": content_type,
+    "User-Agent": f"linkedin-api-python-client/{__version__}"
   }
   if (version_string is not None):
     headers.update({ "LinkedIn-Version": version_string })
