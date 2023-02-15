@@ -1,0 +1,22 @@
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "linkedin-api-client"
+version = "0.1.0"
+description = "Official Python client library for LinkedIn APIs"
+readme = "README.md"
+license = {file = "LICENSE.md"}
+keywords = ["linkedin", "api", "rest.li"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+dependencies = ["requests"]
+requires-python = ">=3.7"
+
+[project.urls]
+Homepage = "https://github.com/linkedin-developers/linkedin-api-python-client"
+repository = "https://github.com/linkedin-developers/linkedin-api-python-client"

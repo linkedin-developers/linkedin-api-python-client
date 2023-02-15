@@ -12,6 +12,8 @@ flask = "*"
 pytest = "*"
 python-dotenv = "*"
 responses = "*"
+build = "*"
+twine = "*"
 
 [requires]
 python_version = "3.10"
