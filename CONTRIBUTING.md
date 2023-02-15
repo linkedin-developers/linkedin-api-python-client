@@ -32,3 +32,19 @@ If there are code changes that might affect the example code ([/examples](exampl
 ## Testing
 
 From the project root directory, run `pytest`.
+
+## Publishing Package to PyPI
+
+Pre-requisites:
+- Create an account on TestPyPI
+- Create an account on PyPI
+
+1. Create source archive and a wheel for the package: `python -m build`
+2. If you've made changes to pyproject.toml, run a check to make sure package metadata will be rendered properly on PyPI: `twine check dist/*`
+3. If you want to test the package upload first:
+   1. Upload to TestPyPI (enter your account credentials): `twine upload -r testpypi dist/*`
+   2. [Search](https://test.pypi.org/search/) for your package on TestPyPI and confirm it looks good.
+   3. Install and test out the published test package in a local project: `python -m pip install -i https://test.pypi.org/simple linkedin-api-client`
+   4. Note: You cannot overwrite existing versions in TestPyPI or PyPI, so for testing, you would need to increment the version if it already exists.
+4. Once everything looks good, upload to PyPI: `twine upload dist/*`
+
