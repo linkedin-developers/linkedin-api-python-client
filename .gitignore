@@ -7,3 +7,4 @@ build/
 .env
 venv/
 .vscode
+.DS_Store
