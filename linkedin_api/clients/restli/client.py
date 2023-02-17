@@ -4,19 +4,47 @@ from typing import Union, Dict, Any, List, Optional, Type, Tuple, TypeVar
 from linkedin_api.clients.common.response import BaseResponse
 import linkedin_api.clients.restli.utils.api as apiutils
 import linkedin_api.clients.restli.utils.encoder as encoder
-from linkedin_api.clients.restli.utils.restli import encode_query_params_for_get_requests
-from linkedin_api.clients.restli.utils.query_tunneling import maybe_apply_query_tunneling_get_requests, maybe_apply_query_tunneling_requests_with_body
+from linkedin_api.clients.restli.utils.restli import (
+    encode_query_params_for_get_requests,
+)
+from linkedin_api.clients.restli.utils.query_tunneling import (
+    maybe_apply_query_tunneling_get_requests,
+    maybe_apply_query_tunneling_requests_with_body,
+)
 from linkedin_api.common.constants import RESTLI_METHODS
-from linkedin_api.clients.restli.response_formatter import BaseResponseFormatter, ActionResponseFormatter, BatchCreateResponseFormatter, \
-    BatchDeleteResponseFormatter, BatchFinderResponseFormatter, CollectionResponseFormatter, BatchGetResponseFormatter, \
-    CreateResponseFormatter, GetResponseFormatter, BatchUpdateResponseFormatter, DeleteResponseFormatter, UpdateResponseFormatter
-from linkedin_api.clients.restli.response import BaseRestliResponse, ActionResponse, BatchCreateResponse, \
-    BatchDeleteResponse, BatchFinderResponse, BatchUpdateResponse, CreateResponse, GetResponse, \
-    BatchGetResponse, CollectionResponse, RestliEntity, UpdateResponse
+from linkedin_api.clients.restli.response_formatter import (
+    BaseResponseFormatter,
+    ActionResponseFormatter,
+    BatchCreateResponseFormatter,
+    BatchDeleteResponseFormatter,
+    BatchFinderResponseFormatter,
+    CollectionResponseFormatter,
+    BatchGetResponseFormatter,
+    CreateResponseFormatter,
+    GetResponseFormatter,
+    BatchUpdateResponseFormatter,
+    DeleteResponseFormatter,
+    UpdateResponseFormatter,
+)
+from linkedin_api.clients.restli.response import (
+    BaseRestliResponse,
+    ActionResponse,
+    BatchCreateResponse,
+    BatchDeleteResponse,
+    BatchFinderResponse,
+    BatchUpdateResponse,
+    CreateResponse,
+    GetResponse,
+    BatchGetResponse,
+    CollectionResponse,
+    RestliEntity,
+    UpdateResponse,
+)
 
 RestliEntityId = Union[str, int, Dict[str, Any]]
 
-T = TypeVar('T', bound=BaseRestliResponse)
+T = TypeVar("T", bound=BaseRestliResponse)
+
 
 class RestliClient:
     """
@@ -34,12 +62,14 @@ class RestliClient:
         self.session = requests.Session()
 
     def get(
-            self, *,
-            resource_path: str,
-            access_token: str,
-            path_keys: Optional[Dict[str, Any]] = None,
-            query_params: Optional[Dict[str, Any]] = {},
-            version_string: Optional[str] = None) -> GetResponse:
+        self,
+        *,
+        resource_path: str,
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = {},
+        version_string: Optional[str] = None
+    ) -> GetResponse:
         """
         Makes a Rest.li GET request to fetch the specified entity on a resource. This method will perform query
         tunneling if necessary.
@@ -65,8 +95,7 @@ class RestliClient:
             >>> ad_account = response.entity
         """
 
-        encoded_query_param_string = encode_query_params_for_get_requests(
-            query_params)
+        encoded_query_param_string = encode_query_params_for_get_requests(query_params)
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.GET,
@@ -75,17 +104,19 @@ class RestliClient:
             encoded_query_param_string=encoded_query_param_string,
             access_token=access_token,
             version_string=version_string,
-            formatter=GetResponseFormatter
+            formatter=GetResponseFormatter,
         )
 
-    def batch_get(self, *,
-                  resource_path: str,
-                  ids: List[RestliEntityId],
-                  access_token: str,
-                  path_keys: Optional[Dict[str, Any]] = None,
-                  query_params: Optional[Dict[str, Any]] = None,
-                  version_string: Optional[str] = None
-                  ) -> BatchGetResponse:
+    def batch_get(
+        self,
+        *,
+        resource_path: str,
+        ids: List[RestliEntityId],
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> BatchGetResponse:
         """
         Makes a Rest.li BATCH_GET request to fetch multiple entities on a resource. This method will perform query
         tunneling if necessary.
@@ -110,12 +141,12 @@ class RestliClient:
                 )
             >>> campaign_groups = response.results.items()
         """
-        query_params_final = copy.deepcopy(
-            query_params) if query_params else {}
+        query_params_final = copy.deepcopy(query_params) if query_params else {}
 
         query_params_final.update({"ids": ids})
         encoded_query_param_string = encode_query_params_for_get_requests(
-            query_params_final)
+            query_params_final
+        )
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.BATCH_GET,
@@ -124,16 +155,18 @@ class RestliClient:
             encoded_query_param_string=encoded_query_param_string,
             access_token=access_token,
             version_string=version_string,
-            formatter=BatchGetResponseFormatter
+            formatter=BatchGetResponseFormatter,
         )
 
-    def get_all(self, *,
-                resource_path: str,
-                access_token: str,
-                path_keys: Optional[Dict[str, Any]] = None,
-                query_params: Optional[Dict[str, Any]] = None,
-                version_string: Optional[str] = None
-                ) -> CollectionResponse:
+    def get_all(
+        self,
+        *,
+        resource_path: str,
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> CollectionResponse:
         """
         Makes a Rest.li GET_ALL request to fetch all entities on a resource.
 
@@ -160,8 +193,7 @@ class RestliClient:
             >>> fields_of_study = response.elements
             >>> total = response.paging.total
         """
-        encoded_query_param_string = encode_query_params_for_get_requests(
-            query_params)
+        encoded_query_param_string = encode_query_params_for_get_requests(query_params)
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.GET_ALL,
@@ -170,17 +202,19 @@ class RestliClient:
             encoded_query_param_string=encoded_query_param_string,
             access_token=access_token,
             version_string=version_string,
-            formatter=CollectionResponseFormatter
+            formatter=CollectionResponseFormatter,
         )
 
-    def finder(self, *,
-               resource_path: str,
-               finder_name: str,
-               access_token: str,
-               path_keys: Optional[Dict[str, Any]] = None,
-               query_params: Optional[Dict[str, Any]] = None,
-               version_string: Optional[str] = None
-               ) -> CollectionResponse:
+    def finder(
+        self,
+        *,
+        resource_path: str,
+        finder_name: str,
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> CollectionResponse:
         """
         Makes a Rest.li FINDER request to find entities by some specified criteria.
 
@@ -216,11 +250,11 @@ class RestliClient:
             >>> total = response.paging.total
         """
 
-        final_query_params = copy.deepcopy(
-            query_params) if query_params else {}
+        final_query_params = copy.deepcopy(query_params) if query_params else {}
         final_query_params.update({"q": finder_name})
         encoded_query_param_string = encode_query_params_for_get_requests(
-            final_query_params)
+            final_query_params
+        )
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.FINDER,
@@ -229,18 +263,20 @@ class RestliClient:
             encoded_query_param_string=encoded_query_param_string,
             access_token=access_token,
             version_string=version_string,
-            formatter=CollectionResponseFormatter
+            formatter=CollectionResponseFormatter,
         )
 
-    def batch_finder(self, *,
-                     resource_path: str,
-                     finder_name: str,
-                     finder_criteria: Tuple[str, List[Dict[str, Any]]],
-                     access_token: str,
-                     path_keys: Optional[Dict[str, Any]] = None,
-                     query_params: Optional[Dict[str, Any]] = None,
-                     version_string: Optional[str] = None
-                     ) -> BatchFinderResponse:
+    def batch_finder(
+        self,
+        *,
+        resource_path: str,
+        finder_name: str,
+        finder_criteria: Tuple[str, List[Dict[str, Any]]],
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> BatchFinderResponse:
         """
         Makes a Rest.li BATCH_FINDER request to find entities by multiple sets of criteria.
 
@@ -280,12 +316,12 @@ class RestliClient:
             >>> organic_share_delete_authorizations = response.results[1].elements
         """
 
-        final_query_params = copy.deepcopy(
-            query_params) if query_params else {}
+        final_query_params = copy.deepcopy(query_params) if query_params else {}
         final_query_params.update({"bq": finder_name})
         final_query_params.update({finder_criteria[0]: finder_criteria[1]})
         encoded_query_param_string = encode_query_params_for_get_requests(
-            final_query_params)
+            final_query_params
+        )
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.BATCH_FINDER,
@@ -294,16 +330,19 @@ class RestliClient:
             encoded_query_param_string=encoded_query_param_string,
             access_token=access_token,
             version_string=version_string,
-            formatter=BatchFinderResponseFormatter
+            formatter=BatchFinderResponseFormatter,
         )
 
-    def create(self, *,
-               resource_path: str,
-               entity: RestliEntity,
-               access_token: str,
-               path_keys: Optional[Dict[str, Any]] = None,
-               query_params: Optional[Dict[str, Any]] = None,
-               version_string: Optional[str] = None) -> CreateResponse:
+    def create(
+        self,
+        *,
+        resource_path: str,
+        entity: RestliEntity,
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> CreateResponse:
         """
         Makes a Rest.li CREATE request to create a new resource entity.
 
@@ -341,18 +380,19 @@ class RestliClient:
             access_token=access_token,
             request_body=entity,
             version_string=version_string,
-            formatter=CreateResponseFormatter
+            formatter=CreateResponseFormatter,
         )
 
     def batch_create(
-            self,
-            *,
-            resource_path: str,
-            entities: List[RestliEntity],
-            access_token: str,
-            path_keys: Optional[Dict[str, Any]] = None,
-            query_params: Optional[Dict[str, Any]] = None,
-            version_string: Optional[str] = None) -> BatchCreateResponse:
+        self,
+        *,
+        resource_path: str,
+        entities: List[RestliEntity],
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> BatchCreateResponse:
         """
         Makes a Rest.li BATCH_CREATE request to create multiple entities in a single call.
 
@@ -390,9 +430,7 @@ class RestliClient:
         """
 
         encoded_query_param_string = encoder.param_encode(query_params)
-        request_body = {
-            "elements": entities
-        }
+        request_body = {"elements": entities}
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.BATCH_CREATE,
@@ -402,18 +440,19 @@ class RestliClient:
             access_token=access_token,
             request_body=request_body,
             version_string=version_string,
-            formatter=BatchCreateResponseFormatter
+            formatter=BatchCreateResponseFormatter,
         )
 
     def update(
-            self,
-            *,
-            resource_path: str,
-            entity: RestliEntity,
-            access_token: str,
-            path_keys: Optional[Dict[str, Any]] = None,
-            query_params: Optional[Dict[str, Any]] = None,
-            version_string: Optional[str] = None) -> UpdateResponse:
+        self,
+        *,
+        resource_path: str,
+        entity: RestliEntity,
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> UpdateResponse:
         """
         Makes a Rest.li UPDATE request to update an entity (overwriting the entity with the provided value).
 
@@ -458,19 +497,20 @@ class RestliClient:
             access_token=access_token,
             request_body=entity,
             version_string=version_string,
-            formatter=UpdateResponseFormatter
+            formatter=UpdateResponseFormatter,
         )
 
     def batch_update(
-            self,
-            *,
-            resource_path: str,
-            entities: List[RestliEntity],
-            ids: List[RestliEntityId],
-            access_token: str,
-            path_keys: Optional[Dict[str, Any]] = None,
-            query_params: Optional[Dict[str, Any]] = {},
-            version_string: Optional[str] = None) -> BatchUpdateResponse:
+        self,
+        *,
+        resource_path: str,
+        entities: List[RestliEntity],
+        ids: List[RestliEntityId],
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = {},
+        version_string: Optional[str] = None
+    ) -> BatchUpdateResponse:
         """
         Makes a Rest.li BATCH_UPDATE request to update multiple entities in a single call.
 
@@ -503,16 +543,13 @@ class RestliClient:
             >>> batch_results = response.results.items()
         """
 
-        final_query_params = copy.deepcopy(
-            query_params) if query_params else {}
+        final_query_params = copy.deepcopy(query_params) if query_params else {}
         final_query_params.update({"ids": ids})
         encoded_query_param_string = encoder.param_encode(final_query_params)
 
         encoded_ids = [encoder.encode(id) for id in ids]
         entities_map = dict(zip(encoded_ids, entities))
-        request_body = {
-            "entities": entities_map
-        }
+        request_body = {"entities": entities_map}
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.BATCH_UPDATE,
@@ -522,18 +559,19 @@ class RestliClient:
             request_body=request_body,
             access_token=access_token,
             version_string=version_string,
-            formatter=BatchUpdateResponseFormatter
+            formatter=BatchUpdateResponseFormatter,
         )
 
     def partial_update(
-            self,
-            *,
-            resource_path: str,
-            patch_set_object: Dict[str, Any],
-            access_token: str,
-            path_keys: Optional[Dict[str, Any]] = None,
-            query_params: Optional[Dict[str, Any]] = None,
-            version_string: Optional[str] = None) -> UpdateResponse:
+        self,
+        *,
+        resource_path: str,
+        patch_set_object: Dict[str, Any],
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> UpdateResponse:
         """
         Makes a Rest.li PARTIAL_UPDATE request to update part of an entity. Directly specify the patch object to send in the request.
 
@@ -565,11 +603,7 @@ class RestliClient:
         """
         encoded_query_param_string = encoder.param_encode(query_params)
 
-        request_body = {
-            "patch": {
-                "$set": patch_set_object
-            }
-        }
+        request_body = {"patch": {"$set": patch_set_object}}
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.PARTIAL_UPDATE,
@@ -579,19 +613,20 @@ class RestliClient:
             request_body=request_body,
             access_token=access_token,
             version_string=version_string,
-            formatter=UpdateResponseFormatter
+            formatter=UpdateResponseFormatter,
         )
 
     def batch_partial_update(
-            self,
-            *,
-            resource_path: str,
-            ids: List[RestliEntityId],
-            patch_set_objects: List[Dict[str, Any]],
-            access_token: str,
-            path_keys: Optional[Dict[str, Any]] = None,
-            query_params: Optional[Dict[str, Any]] = None,
-            version_string: Optional[str] = None) -> BatchUpdateResponse:
+        self,
+        *,
+        resource_path: str,
+        ids: List[RestliEntityId],
+        patch_set_objects: List[Dict[str, Any]],
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        version_string: Optional[str] = None
+    ) -> BatchUpdateResponse:
         """
         Makes a Rest.li BATCH_PARTIAL_UPDATE request to update multiple entities at once, by only providing the fields of the entities that require updating.
 
@@ -626,18 +661,16 @@ class RestliClient:
             >>> result_status = response.results["123"].status
         """
 
-        final_query_params = copy.deepcopy(
-            query_params) if query_params else {}
+        final_query_params = copy.deepcopy(query_params) if query_params else {}
         final_query_params.update({"ids": ids})
         encoded_query_param_string = encoder.param_encode(final_query_params)
 
         id_to_patch_map = dict(zip(ids, patch_set_objects))
         entities_map = {
             encoder.encode(id): {"patch": {"$set": patch_set_object}}
-            for (id, patch_set_object) in id_to_patch_map.items()}
-        request_body = {
-            "entities": entities_map
+            for (id, patch_set_object) in id_to_patch_map.items()
         }
+        request_body = {"entities": entities_map}
 
         return self.__send_and_format_response(
             restli_method=RESTLI_METHODS.BATCH_PARTIAL_UPDATE,
@@ -647,17 +680,18 @@ class RestliClient:
             request_body=request_body,
             access_token=access_token,
             version_string=version_string,
-            formatter=BatchUpdateResponseFormatter
+            formatter=BatchUpdateResponseFormatter,
         )
 
     def delete(
-            self,
-            *,
-            resource_path: str,
-            access_token: str,
-            path_keys: Optional[Dict[str, Any]] = None,
-            query_params: Optional[Dict[str, Any]] = {},
-            version_string: Optional[str] = None) -> BaseRestliResponse:
+        self,
+        *,
+        resource_path: str,
+        access_token: str,
+        path_keys: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = {},
+        version_string: Optional[str] = None
+    ) -> BaseRestliResponse:
         """
         Makes a Rest.li DELETE request to delete an entity.
 
@@ -690,7 +724,7 @@ class RestliClient:
             encoded_query_param_string=encoded_query_param_string,
             access_token=access_token,
             version_string=version_string,
-            formatter=DeleteResponseFormatter
+            formatter=DeleteResponseFormatter,
         )
 
     def batch_delete(
@@ -727,8 +761,7 @@ class RestliClient:
             >>> status_code = response.results["123"].status
         """
 
-        final_query_params = copy.deepcopy(
-            query_params) if query_params else {}
+        final_query_params = copy.deepcopy(query_params) if query_params else {}
         final_query_params.update({"ids": ids})
         encoded_query_param_string = encoder.param_encode(final_query_params)
 
@@ -739,7 +772,7 @@ class RestliClient:
             restli_method=RESTLI_METHODS.BATCH_DELETE,
             access_token=access_token,
             version_string=version_string,
-            formatter=BatchDeleteResponseFormatter
+            formatter=BatchDeleteResponseFormatter,
         )
 
     def action(
@@ -748,7 +781,7 @@ class RestliClient:
         resource_path: str,
         action_name: str,
         access_token: str,
-        action_params: Optional[Dict[str,Any]] = None,
+        action_params: Optional[Dict[str, Any]] = None,
         path_keys: Optional[Dict[str, Any]] = None,
         query_params: Optional[Dict[str, Any]] = None,
         version_string: Optional[str] = None
@@ -784,9 +817,8 @@ class RestliClient:
                 )
             >>> status_code = response.status_code
         """
-        final_query_params = copy.deepcopy(
-            query_params) if query_params else {}
-        final_query_params.update({ "action": action_name })
+        final_query_params = copy.deepcopy(query_params) if query_params else {}
+        final_query_params.update({"action": action_name})
 
         encoded_query_param_string = encoder.param_encode(final_query_params)
 
@@ -800,7 +832,7 @@ class RestliClient:
             request_body=request_body,
             access_token=access_token,
             version_string=version_string,
-            formatter=ActionResponseFormatter
+            formatter=ActionResponseFormatter,
         )
 
     def __send_and_format_response(
@@ -818,7 +850,7 @@ class RestliClient:
         url = apiutils.build_rest_url(
             resource_path=resource_path,
             path_keys=path_keys,
-            version_string=version_string
+            version_string=version_string,
         )
 
         if request_body is not None:
@@ -828,7 +860,7 @@ class RestliClient:
                 original_restli_method=restli_method,
                 original_request_body=request_body,
                 access_token=access_token,
-                version_string=version_string
+                version_string=version_string,
             )
         else:
             prepared_request = maybe_apply_query_tunneling_get_requests(
@@ -836,7 +868,7 @@ class RestliClient:
                 url=url,
                 original_restli_method=restli_method,
                 access_token=access_token,
-                version_string=version_string
+                version_string=version_string,
             )
 
         response = self.session.send(prepared_request)

@@ -9,13 +9,15 @@ Here are instructions for setting up the project on your local machine for testi
 1. Clone the project into a new directory: `git clone https://github.com/linkedin-developers/linkedin-api-python-client.git`
 2. Install `pipenv` on your machine: `pip install pipenv`
 3. From the project root directory, create your virtual environment and install all the packages: `pipenv install --dev`
-4. Activate your virtual environment from the project root directory: `pipenv shell`
-5. Run tests or examples. For example: `python3 examples/get-profile.py`
-6. Deactivate your virtual environment at any time using `exit`
+4. Install git hook scripts: `pipenv run pre-commit install`
 
-To install packages exactly as specified in Pipfile.lock: `pipenv sync`
-
-To upgrade packages to latest versions and update the Pipfile.lock: `pipenv update`
+Here are some other useful commands:
+- Activate your virtual environment from the project root directory: `pipenv shell`
+- Run tests or examples. For example: `python3 examples/get-profile.py`
+- Deactivate your virtual environment at any time using `exit`
+- Run pre-commit checks on all files: `pipenv run pre-commit run --all-files`
+- To install packages exactly as specified in Pipfile.lock: `pipenv sync`
+- To upgrade packages to latest versions and update the Pipfile.lock: `pipenv update`
 
 ## Commit Messages
 
@@ -38,6 +40,7 @@ From the project root directory, run `pytest`.
 Pre-requisites:
 - Create an account on TestPyPI
 - Create an account on PyPI
+- Get added as a maintainer to the project on pypi.org
 
 1. Create source archive and a wheel for the package: `python -m build`
 2. If you've made changes to pyproject.toml, run a check to make sure package metadata will be rendered properly on PyPI: `twine check dist/*`
@@ -47,4 +50,3 @@ Pre-requisites:
    3. Install and test out the published test package in a local project: `python -m pip install -i https://test.pypi.org/simple linkedin-api-client`
    4. Note: You cannot overwrite existing versions in TestPyPI or PyPI, so for testing, you would need to increment the version if it already exists.
 4. Once everything looks good, upload to PyPI: `twine upload dist/*`
-
