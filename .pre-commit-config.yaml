@@ -9,3 +9,9 @@ repos:
     rev: 22.10.0
     hooks:
     -   id: black
+-   repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v2.1.1
+    hooks:
+    -   id: conventional-pre-commit
+        stages: [commit-msg]
+        args: []
