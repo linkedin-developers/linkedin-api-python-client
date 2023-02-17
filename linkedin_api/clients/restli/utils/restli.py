@@ -7,8 +7,11 @@ from requests import Response
 
 
 def get_created_entity_id(response: Response, decode: bool = True):
-  reduced_encoded_entity_id = response.headers.get(HEADERS.CREATED_ENTITY_ID.value, None)
-  return reduced_decode(reduced_encoded_entity_id)
+    reduced_encoded_entity_id = response.headers.get(
+        HEADERS.CREATED_ENTITY_ID.value, None
+    )
+    return reduced_decode(reduced_encoded_entity_id)
+
 
 def encode_query_params_for_get_requests(query_params: Optional[Dict[str, Any]]) -> str:
     """Encodes query params for HTTP GET requests
@@ -30,15 +33,19 @@ def encode_query_params_for_get_requests(query_params: Optional[Dict[str, Any]])
     FIELDS_PARAM = "fields"
 
     if query_params is None:
-      return ''
+        return ""
 
     query_params_copy = copy.deepcopy(query_params)
-    fields = query_params_copy.pop(
-        FIELDS_PARAM) if FIELDS_PARAM in query_params_copy.keys() else None
+    fields = (
+        query_params_copy.pop(FIELDS_PARAM)
+        if FIELDS_PARAM in query_params_copy.keys()
+        else None
+    )
 
     encoded_query_param_string = param_encode(query_params_copy)
     if fields:
-        encoded_query_param_string = '&'.join(
-           [ encoded_query_param_string, f"{FIELDS_PARAM}={fields}" ])
+        encoded_query_param_string = "&".join(
+            [encoded_query_param_string, f"{FIELDS_PARAM}={fields}"]
+        )
 
     return encoded_query_param_string

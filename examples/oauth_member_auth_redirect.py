@@ -15,11 +15,12 @@ Steps:
 3. Login as LinkedIn member and authorize application
 4. View member profile data
 """
-import os,sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import os, sys
 
-from flask import Flask,redirect,request
-from dotenv import load_dotenv,find_dotenv
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+from flask import Flask, redirect, request
+from dotenv import load_dotenv, find_dotenv
 from linkedin_api.clients.auth.client import AuthClient
 from linkedin_api.clients.restli.client import RestliClient
 
@@ -33,34 +34,34 @@ app = Flask(__name__)
 
 access_token = None
 
-auth_client = AuthClient(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_url=OAUTH2_REDIRECT_URL)
+auth_client = AuthClient(
+    client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_url=OAUTH2_REDIRECT_URL
+)
 restli_client = RestliClient()
 
-@app.route('/', methods=["GET"])
+
+@app.route("/", methods=["GET"])
 def main():
-  global access_token
-  if access_token == None:
-    return redirect(auth_client.generate_member_auth_url(scopes=["r_liteprofile"]))
-  else:
-    return restli_client.get(
-      resource_path="/me",
-      access_token=access_token
-    ).entity
+    global access_token
+    if access_token == None:
+        return redirect(auth_client.generate_member_auth_url(scopes=["r_liteprofile"]))
+    else:
+        return restli_client.get(resource_path="/me", access_token=access_token).entity
 
 
-@app.route('/oauth', methods=["GET"])
+@app.route("/oauth", methods=["GET"])
 def oauth():
-  global access_token
+    global access_token
 
-  args = request.args
-  auth_code = args.get("code")
+    args = request.args
+    auth_code = args.get("code")
 
-  if auth_code:
-    token_response = auth_client.exchange_auth_code_for_access_token(auth_code)
-    access_token = token_response.access_token
-    print(f"Access token: {access_token}")
-    return redirect('/')
+    if auth_code:
+        token_response = auth_client.exchange_auth_code_for_access_token(auth_code)
+        access_token = token_response.access_token
+        print(f"Access token: {access_token}")
+        return redirect("/")
 
 
-if __name__ == '__main__':
-    app.run(host='localhost', port=3000)
+if __name__ == "__main__":
+    app.run(host="localhost", port=3000)
