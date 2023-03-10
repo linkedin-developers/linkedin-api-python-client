@@ -19,9 +19,11 @@ Here are some other useful commands:
 - To install packages exactly as specified in Pipfile.lock: `pipenv sync`
 - To upgrade packages to latest versions and update the Pipfile.lock: `pipenv update`
 
-## Commit Messages
+## Commits and PRs
 
-Please follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+Pre-commit checks perform linting, some of which requires python. To avoid issues, make sure you run `pipenv shell` before creating a commit.
+
+Please follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for standardized commit messages.
 
 ## Documentation
 
@@ -50,3 +52,7 @@ Pre-requisites:
    3. Install and test out the published test package in a local project: `python -m pip install -i https://test.pypi.org/simple linkedin-api-client`
    4. Note: You cannot overwrite existing versions in TestPyPI or PyPI, so for testing, you would need to increment the version if it already exists.
 4. Once everything looks good, upload to PyPI: `twine upload dist/*`
+5. Tag and release
+   1. Tag the last commit: `git tag -a v<version> -m "Release <version>" <commit-hash>`. For example: `git tag -a v0.1.0 -m "Release 0.1.0" 043cc4ea`
+   2. Push the local tag: `git push origin --tags`
+   3. Create a new release in the Github repo based on the tagged commit.
