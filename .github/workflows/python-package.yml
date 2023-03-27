@@ -63,7 +63,7 @@ jobs:
       run: poetry install --no-interaction
 
     #----------------------------------------------
-    #              run test suite
+    # Run test suite
     #----------------------------------------------
     - name: Run tests
       run: |

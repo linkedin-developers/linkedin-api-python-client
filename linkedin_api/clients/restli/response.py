@@ -1,6 +1,5 @@
-from typing import Dict, Optional, Any, Union, List, TypedDict
+from typing import Dict, Optional, Any, Union, List
 from requests import Response
-from requests.structures import CaseInsensitiveDict
 from linkedin_api.clients.common.response import BaseResponse
 from linkedin_api.clients.restli.types import RestliEntity, EncodedEntityId
 
@@ -37,7 +36,7 @@ class GetResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         entity: Union[Dict[str, Any], str, int, bool],
     ) -> None:
@@ -53,7 +52,7 @@ class BatchGetResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         results: Dict[EncodedEntityId, RestliEntity],
         statuses: Dict[EncodedEntityId, int],
@@ -83,7 +82,7 @@ class CollectionResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         elements: List[RestliEntity],
         paging: Paging,
@@ -148,7 +147,7 @@ class BatchFinderResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         results: List[BatchFinderResult],
     ):
@@ -166,7 +165,7 @@ class CreateResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         entity_id: Optional[EncodedEntityId] = None,
         entity: Optional[RestliEntity] = None,
@@ -208,7 +207,7 @@ class BatchCreateResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         elements: List[BatchCreateResult],
     ):
@@ -226,7 +225,7 @@ class UpdateResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         entity: Optional[RestliEntity],
     ):
@@ -253,7 +252,7 @@ class BatchUpdateResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         results: Optional[Dict[EncodedEntityId, BatchUpdateResult]],
     ):
@@ -279,7 +278,7 @@ class BatchDeleteResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         results: Optional[Dict[EncodedEntityId, BatchDeleteResult]],
     ):
@@ -297,7 +296,7 @@ class ActionResponse(BaseRestliResponse):
         self,
         status_code: int,
         url: str,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         response: Response,
         value: Optional[Any],
     ):
