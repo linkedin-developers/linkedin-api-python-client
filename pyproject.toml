@@ -24,7 +24,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-requests = "^2.22.0"
+requests = "*"
 
 [tool.poetry.group.dev.dependencies]
 curlify = "*"
