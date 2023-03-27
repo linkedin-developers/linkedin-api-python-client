@@ -1,9 +1,11 @@
 import linkedin_api.common.constants as constants
-from linkedin_api import __version__
+from importlib.metadata import version
 from linkedin_api.clients.restli.utils.encoder import encode
 from typing import Dict, Any, Optional
 from linkedin_api.common.errors import InvalidArgumentError
 import re
+
+__version__ = version("linkedin-api-client")
 
 
 def get_rest_api_base_url(version_string):

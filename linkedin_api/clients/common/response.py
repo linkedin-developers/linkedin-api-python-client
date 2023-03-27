@@ -1,12 +1,12 @@
 from requests import Response
-from requests.structures import CaseInsensitiveDict
+from typing import Dict
 
 
 class BaseResponse:
     def __init__(
         self,
         status_code: int,
-        headers: CaseInsensitiveDict[str],
+        headers: Dict[str, str],
         url: str,
         response: Response,
     ):
