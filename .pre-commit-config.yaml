@@ -9,9 +9,13 @@ repos:
     rev: 22.10.0
     hooks:
     -   id: black
+        language_version: python3
+        additional_dependencies: ["poetry-core"]
 -   repo: https://github.com/compilerla/conventional-pre-commit
     rev: v2.1.1
     hooks:
     -   id: conventional-pre-commit
         stages: [commit-msg]
         args: []
+        language_version: python3
+        additional_dependencies: ["poetry-core"]

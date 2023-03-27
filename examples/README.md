@@ -4,7 +4,7 @@ This directory contains examples showing how to use the LinkedIn API Python clie
 
 ### Steps to Run
 
-1. Activate virtual environment: `pipenv shell`
+1. Activate virtual environment: `poetry shell`
 2. Navigate inside the `/examples` directory
 3. Create a `.env` file that contains the following variables that will be used when running the examples. Only some of these variables may actually be needed to run a particular script. Check the specific example comments on more specific requirements (e.g. required scopes for the access token).
   ```sh
