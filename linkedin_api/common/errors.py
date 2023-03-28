@@ -11,3 +11,7 @@ class MissingArgumentError(Exception):
 class ResponseFormattingError(Exception):
     "Error raised when formatting API response"
     pass
+
+class InvalidSerializedRestliError(Exception):
+    "Error raised when an incorrectly serialized Rest.li string is encountered"
+    pass
