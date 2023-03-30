@@ -6,11 +6,26 @@ import copy
 from requests import Response
 
 
-def get_created_entity_id(response: Response, decode: bool = True):
+def get_created_entity_id(response: Response, decode: bool = False) -> Any:
+    """
+    Return the created entity id. This is present in the response header for
+    a CREATE request. Can optionally decode the entity id value; otherwise this will
+    return the reduced-encoded string.
+
+    Args:
+        response (Response): the response object
+        decode (bool, optional): Flag whether to decode the id. Defaults to False.
+
+    Returns:
+        Any: The created entity id
+    """
     reduced_encoded_entity_id = response.headers.get(
         HEADERS.CREATED_ENTITY_ID.value, None
     )
-    return reduced_decode(reduced_encoded_entity_id)
+    if decode and reduced_encoded_entity_id is not None:
+        return reduced_decode(reduced_encoded_entity_id)
+    else:
+        return reduced_encoded_entity_id
 
 
 def encode_query_params_for_get_requests(query_params: Optional[Dict[str, Any]]) -> str:

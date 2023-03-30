@@ -168,6 +168,7 @@ class CreateResponse(BaseRestliResponse):
         headers: Dict[str, str],
         response: Response,
         entity_id: Optional[EncodedEntityId] = None,
+        decoded_entity_id: Optional[Union[str, Dict[str, Any]]] = None,
         entity: Optional[RestliEntity] = None,
     ):
         super().__init__(
@@ -175,8 +176,13 @@ class CreateResponse(BaseRestliResponse):
         )
         self.entity_id = entity_id
         """
-    The encoded entity id of the created entity
+    The reduced-encoded entity id of the created entity (e.g. "urn%3Ali%3Aapp%3A123")
     """
+
+        self.decoded_entity_id = decoded_entity_id
+        """
+        The decoded entity id of the created entity (e.g. "urn:li:app:123")
+        """
 
         self.entity = entity
         """

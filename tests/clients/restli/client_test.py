@@ -413,7 +413,38 @@ the input request options and method type and expected response.
                 "base_url": NON_VERSIONED_BASE_URL,
                 "path": "/testResource",
                 "checked_headers": {"X-RestLi-Method": RESTLI_METHODS.CREATE.value},
-                "response_properties": {"entity_id": "123", "entity": None},
+                "response_properties": {
+                    "entity_id": "123",
+                    "decoded_entity_id": "123",
+                    "entity": None,
+                },
+            },
+        ),
+        (
+            # Create request on a non-versioned collection resource, with complex entity id
+            RESTLI_METHODS.CREATE,
+            {
+                # request_args
+                "resource_path": "/testResource",
+                "entity": {"name": "TestApp1"},
+                "access_token": ACCESS_TOKEN,
+            },
+            {
+                # input_response
+                "json": None,
+                "status": 201,
+                "headers": {"x-restli-id": "urn%3Ali%3Aapp%3A123?"},
+            },
+            {
+                # expected_values
+                "base_url": NON_VERSIONED_BASE_URL,
+                "path": "/testResource",
+                "checked_headers": {"X-RestLi-Method": RESTLI_METHODS.CREATE.value},
+                "response_properties": {
+                    "entity_id": "urn%3Ali%3Aapp%3A123?",
+                    "decoded_entity_id": "urn:li:app:123?",
+                    "entity": None,
+                },
             },
         ),
         (
@@ -438,6 +469,7 @@ the input request options and method type and expected response.
                 "checked_headers": {"X-RestLi-Method": RESTLI_METHODS.CREATE.value},
                 "response_properties": {
                     "entity_id": "123",
+                    "decoded_entity_id": "123",
                     "entity": {"name": "TestApp1", "reference": "foobar123"},
                 },
             },

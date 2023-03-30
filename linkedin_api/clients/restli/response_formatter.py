@@ -109,7 +109,8 @@ class CreateResponseFormatter(BaseResponseFormatter[CreateResponse]):
             url=response.url,
             headers=response.headers,
             response=response,
-            entity_id=get_created_entity_id(response, True),
+            entity_id=get_created_entity_id(response, False),
+            decoded_entity_id=get_created_entity_id(response, True),
             entity=json_data if json_data else None,
         )
 
