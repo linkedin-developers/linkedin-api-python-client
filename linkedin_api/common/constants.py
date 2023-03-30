@@ -64,3 +64,14 @@ RESTLI_METHOD_TO_HTTP_METHOD_MAP = {
     "DELETE": "DELETE",
     "BATCH_DELETE": "DELETE",
 }
+
+# Rest.li special characters
+LIST_PREFIX = "List("
+LIST_SUFFIX = ")"
+LIST_ITEM_SEP = ","
+OBJ_PREFIX = "("
+OBJ_SUFFIX = ")"
+OBJ_KEY_VAL_SEP = ":"
+OBJ_KEY_VAL_PAIR_SEP = ","
+LEFT_BRACKET = "("
+RIGHT_BRACKET = ")"

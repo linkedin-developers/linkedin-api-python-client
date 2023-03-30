@@ -1,17 +1,18 @@
 from linkedin_api.common.errors import InvalidSerializedRestliError
+from linkedin_api.common.constants import (
+    LIST_PREFIX,
+    LIST_SUFFIX,
+    LIST_ITEM_SEP,
+    OBJ_PREFIX,
+    OBJ_SUFFIX,
+    OBJ_KEY_VAL_SEP,
+    OBJ_KEY_VAL_PAIR_SEP,
+    LEFT_BRACKET,
+    RIGHT_BRACKET,
+)
 from urllib.parse import unquote
 from typing import Dict, List, Any, Union
 import re
-
-LIST_PREFIX = "List("
-LIST_SUFFIX = ")"
-LIST_ITEM_SEP = ","
-OBJ_PREFIX = "("
-OBJ_SUFFIX = ")"
-OBJ_KEY_VAL_SEP = ":"
-OBJ_KEY_VAL_PAIR_SEP = ","
-LEFT_BRACKET = "("
-RIGHT_BRACKET = ")"
 
 # These special characters are URL-encoded in reduced encoded primitives: "(", ")", ",", ":", "'"
 reduced_decode_special_chars_pattern = r"%28|%29|%2C|%3A|%27"
@@ -157,7 +158,7 @@ def __decode_list(restli_encoded_str: str, reduced: bool) -> List[Any]:
             idx = right_bracket_idx + 2
         else:
             # The current list entry is a primitive
-            end_idx = restli_encoded_str.find(",", idx)
+            end_idx = restli_encoded_str.find(LIST_ITEM_SEP, idx)
             if end_idx < 0:
                 end_idx = len(restli_encoded_str)
             decoded_list.append(

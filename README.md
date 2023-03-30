@@ -721,7 +721,8 @@ Base class: [BaseRestliResponse](#class-baserestliresponse)
 
 | Properties | Type | Description |
 |---|---|---|
-| `entity_id` | str | The encoded entity id |
+| `entity_id` | str | The reduced-encoded entity id. |
+| `decoded_entity_id` | Union[str, Dict[str,Any]] | The decoded entity id. |
 | `entity` | Dict[str,Any] | Optional created entity. Some APIs support returning the created entity to eliminate the need for a subsequent GET call. |
 
 ##### `class BatchCreateResponse`
