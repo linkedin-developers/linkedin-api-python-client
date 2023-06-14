@@ -18,7 +18,7 @@ import random
 import curlify
 
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
-AD_CAMPAIGN_GROUPS_RESOURCE = "/adCampaignGroups2"
+AD_CAMPAIGN_GROUPS_RESOURCE = "/adCampaignGroups"
 API_VERSION = "202302"
 
 restli_client = RestliClient()
