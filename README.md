@@ -96,7 +96,7 @@ print(response.entity)
 
 ### Finder Request Example
 
-Here is a more non-trivial example to [find ad accounts](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-accounts?#search-for-accounts) by some search critiera. This requires a 3-legged access token with the "r_ads" scope, which is included with the Advertising APIs product.
+Here is a more non-trivial example to [find ad accounts](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-accounts?#search-for-accounts) by some search criteria. This requires a 3-legged access token with the "r_ads" scope, which is included with the Advertising APIs product.
 
 The "search" query parameter in this case is not a primitive, but a complex object, which we represent as a dictionary. The client will handle the correct URL-encoding. This is a versioned API call, so we also need to provide the version string in the "YYYYMM" format.
 
