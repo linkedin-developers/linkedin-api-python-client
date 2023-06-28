@@ -187,7 +187,7 @@ def __decode_object(restli_encoded_str: str, reduced: bool) -> Dict[str, Any]:
     decoded_object = {}
     idx = 0
     while idx < len(restli_encoded_str):
-        # Get the key value between the start index and key-val separater (:)
+        # Get the key value between the start index and key-val separator (:)
         colon_idx = restli_encoded_str.find(OBJ_KEY_VAL_SEP, idx)
         key = __restli_unescape(restli_encoded_str[idx:colon_idx], reduced)
 
