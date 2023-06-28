@@ -76,7 +76,7 @@ def build_rest_url(
         base_url = constants.NON_VERSIONED_BASE_URL
 
     # Validate resource_path and path_keys
-    num_path_keys = 0 if path_keys == None else len(path_keys.keys())
+    num_path_keys = 0 if path_keys is None else len(path_keys.keys())
     if path_keys:
         encoded_path_keys = {k: encode(v) for (k, v) in path_keys.items()}
     else:
