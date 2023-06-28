@@ -1,9 +1,16 @@
 import linkedin_api.common.constants as constants
-from importlib.metadata import version
 from linkedin_api.clients.restli.utils.encoder import encode
 from typing import Dict, Any, Optional
 from linkedin_api.common.errors import InvalidArgumentError
 import re
+
+import sys
+
+if sys.version_info >= (3, 8):
+    from importlib.metadata import version
+else:
+    from importlib_metadata import version
+
 
 __version__ = version("linkedin-api-client")
 

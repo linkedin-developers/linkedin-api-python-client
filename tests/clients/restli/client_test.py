@@ -1,6 +1,5 @@
 import json
 from linkedin_api.clients.restli.client import RestliClient
-from importlib.metadata import version
 import pytest
 import responses
 from responses import matchers
@@ -11,6 +10,12 @@ from linkedin_api.common.constants import (
     VERSIONED_BASE_URL,
     HTTP_METHODS,
 )
+import sys
+
+if sys.version_info >= (3, 8):
+    from importlib.metadata import version
+else:
+    from importlib_metadata import version
 
 __version__ = version("linkedin-api-client")
 ACCESS_TOKEN = "ABC123"
