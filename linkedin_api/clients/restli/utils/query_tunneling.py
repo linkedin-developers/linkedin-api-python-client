@@ -10,7 +10,7 @@ import linkedin_api.clients.restli.utils.api as apiutils
 import random
 import string
 import json
-from typing import Optional, Type
+from typing import Optional
 
 MAX_QUERY_STRING_LENGTH = 4000
 
