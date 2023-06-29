@@ -1,7 +1,6 @@
 import requests
 import copy
 from typing import Union, Dict, Any, List, Optional, Type, Tuple, TypeVar
-from linkedin_api.clients.common.response import BaseResponse
 import linkedin_api.clients.restli.utils.api as apiutils
 import linkedin_api.clients.restli.utils.encoder as encoder
 from linkedin_api.clients.restli.utils.restli import (
@@ -67,7 +66,7 @@ class RestliClient:
         resource_path: str,
         access_token: str,
         path_keys: Optional[Dict[str, Any]] = None,
-        query_params: Optional[Dict[str, Any]] = {},
+        query_params: Optional[Dict[str, Any]] = None,
         version_string: Optional[str] = None
     ) -> GetResponse:
         """
@@ -508,7 +507,7 @@ class RestliClient:
         ids: List[RestliEntityId],
         access_token: str,
         path_keys: Optional[Dict[str, Any]] = None,
-        query_params: Optional[Dict[str, Any]] = {},
+        query_params: Optional[Dict[str, Any]] = None,
         version_string: Optional[str] = None
     ) -> BatchUpdateResponse:
         """
@@ -689,7 +688,7 @@ class RestliClient:
         resource_path: str,
         access_token: str,
         path_keys: Optional[Dict[str, Any]] = None,
-        query_params: Optional[Dict[str, Any]] = {},
+        query_params: Optional[Dict[str, Any]] = None,
         version_string: Optional[str] = None
     ) -> BaseRestliResponse:
         """
@@ -734,7 +733,7 @@ class RestliClient:
         ids: List[RestliEntityId],
         access_token: str,
         path_keys: Optional[Dict[str, Any]] = None,
-        query_params: Optional[Dict[str, Any]] = {},
+        query_params: Optional[Dict[str, Any]] = None,
         version_string: Optional[str] = None
     ) -> BatchDeleteResponse:
         """
