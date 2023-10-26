@@ -13,18 +13,18 @@ class Paging:
     ):
         self.start = start
         """
-    The start index of returned results (zero-based index).
-    """
+        The start index of returned results (zero-based index).
+        """
 
         self.count = count
         """
-    The number of results returned in the response.
-    """
+        The number of results returned in the response.
+        """
 
         self.total = total
         """
-    The total number of results available.
-    """
+        The total number of results available.
+        """
 
 
 class BaseRestliResponse(BaseResponse):
@@ -43,8 +43,9 @@ class GetResponse(BaseRestliResponse):
         super().__init__(status_code, headers, url, response)
         self.entity = entity
         """
-    The representation (typically a dictionary) of the retrieved entity, decoded from the json-encoded response content.
-    """
+        The representation (typically a dictionary) of the retrieved entity, decoded from the 
+        json-encoded response content.
+        """
 
 
 class BatchGetResponse(BaseRestliResponse):
@@ -63,18 +64,21 @@ class BatchGetResponse(BaseRestliResponse):
         )
         self.results = results
         """
-    A map of entities that were successfully retrieved, with the key being the encoded entity id, and the value being a dictionary representing the entity.
-    """
+        A map of entities that were successfully retrieved, with the key being the encoded entity 
+        id, and the value being a dictionary representing the entity.
+        """
 
         self.statuses = statuses
         """
-    A map of entities and status code, with the key being the encoded entity id, and the value being the status code number value.
-    """
+        A map of entities and status code, with the key being the encoded entity id, and the value 
+        being the status code number value.
+        """
 
         self.errors = errors
         """
-    A map containing entities that could not be successfully fetched, with the key being the encoded entity id, and the value being the error response.
-    """
+        A map containing entities that could not be successfully fetched, with the key being the 
+        encoded entity id, and the value being the error response.
+        """
 
 
 class CollectionResponse(BaseRestliResponse):
@@ -93,18 +97,18 @@ class CollectionResponse(BaseRestliResponse):
         )
         self.elements = elements
         """
-    The list of entities returned in the response.
-    """
+        The list of entities returned in the response.
+        """
 
         self.paging = paging
         """
-    Paging metadata object
-    """
+        Paging metadata object
+        """
 
         self.metadata = metadata
         """
-    Optional response metadata object
-    """
+        Optional response metadata object
+        """
 
 
 class BatchFinderResult:
@@ -118,28 +122,28 @@ class BatchFinderResult:
     ):
         self.elements = elements
         """
-    The list of entities found for the corresponding finder criteria.
-    """
+        The list of entities found for the corresponding finder criteria.
+        """
 
         self.paging = paging
         """
-    Optional paging metadata object
-    """
+        Optional paging metadata object.
+        """
 
         self.metadata = metadata
         """
-    Optional response metadata object
-    """
+        Optional response metadata object.
+        """
 
         self.error = error
         """
-    Optional error details if finder call failed
-    """
+        Optional error details if finder call failed.
+        """
 
         self.isError = isError
         """
-    Flag if this finder call experienced an error
-    """
+        Flag if this finder call experienced an error.
+        """
 
 
 class BatchFinderResponse(BaseRestliResponse):
@@ -156,8 +160,9 @@ class BatchFinderResponse(BaseRestliResponse):
         )
         self.results = results
         """
-    The list of finder results, in the same order as the requested batch finder search criteria list.
-    """
+        The list of finder results, in the same order as the requested batch finder search 
+        criteria list.
+        """
 
 
 class CreateResponse(BaseRestliResponse):
@@ -176,36 +181,37 @@ class CreateResponse(BaseRestliResponse):
         )
         self.entity_id = entity_id
         """
-    The reduced-encoded entity id of the created entity (e.g. "urn%3Ali%3Aapp%3A123")
-    """
+        The reduced-encoded entity id of the created entity (e.g. "urn%3Ali%3Aapp%3A123").
+        """
 
         self.decoded_entity_id = decoded_entity_id
         """
-        The decoded entity id of the created entity (e.g. "urn:li:app:123")
+        The decoded entity id of the created entity (e.g. "urn:li:app:123").
         """
 
         self.entity = entity
         """
-    Optional created entity. Some APIs support returning the created entity to eliminate the need for a subsequent GET call.
-    """
+        Optional created entity. Some APIs support returning the created entity to eliminate the 
+        need for a subsequent GET call.
+        """
 
 
 class BatchCreateResult:
     def __init__(self, status: int, id: str, error: Any):
         self.status = status
         """
-    The status code of the individual create call.
-    """
+        The status code of the individual create call.
+        """
 
         self.id = id
         """
-    The id of the created entity.
-    """
+        The id of the created entity.
+        """
 
         self.error = error
         """
-    Error details if the create call experienced an error.
-    """
+        Error details if the create call experienced an error.
+        """
 
 
 class BatchCreateResponse(BaseRestliResponse):
@@ -222,8 +228,9 @@ class BatchCreateResponse(BaseRestliResponse):
         )
         self.elements = elements
         """
-    The list of batch create results, corresponding to the order of the `entities` request parameter
-    """
+        The list of batch create results, corresponding to the order of the `entities` request 
+        parameter.
+        """
 
 
 class UpdateResponse(BaseRestliResponse):
@@ -240,8 +247,9 @@ class UpdateResponse(BaseRestliResponse):
         )
         self.entity = entity
         """
-    Optional entity after the update. Some APIs support returning the updated entity to eliminate the need for a subsequent GET call.
-    """
+        Optional entity after the update. Some APIs support returning the updated entity to 
+        eliminate the need for a subsequent GET call.
+        """
 
 
 class BatchUpdateResult:
@@ -249,8 +257,8 @@ class BatchUpdateResult:
     def __init__(self, status: int):
         self.status = status
         """
-    The status code of the individual update call
-    """
+        The status code of the individual update call
+        """
 
 
 class BatchUpdateResponse(BaseRestliResponse):
@@ -267,16 +275,17 @@ class BatchUpdateResponse(BaseRestliResponse):
         )
         self.results = results
         """
-    The results map where the keys are the encoded entity ids, and the values are the individual update call results, which includes the status code.
-    """
+        The results map where the keys are the encoded entity ids, and the values are the 
+        individual update call results, which includes the status code.
+        """
 
 
 class BatchDeleteResult:
     def __init__(self, status: int):
         self.status = status
         """
-    The status code of the delete call.
-    """
+        The status code of the delete call.
+        """
 
 
 class BatchDeleteResponse(BaseRestliResponse):
@@ -293,8 +302,9 @@ class BatchDeleteResponse(BaseRestliResponse):
         )
         self.results = results
         """
-    The results map where the keys are the encoded entity ids, and the values are the individual delete call results, which includes the status code.
-    """
+        The results map where the keys are the encoded entity ids, and the values are the 
+        individual delete call results, which includes the status code.
+        """
 
 
 class ActionResponse(BaseRestliResponse):
@@ -311,5 +321,5 @@ class ActionResponse(BaseRestliResponse):
         )
         self.value = value
         """
-    The action response value.
-    """
+        The action response value.
+        """

@@ -12,20 +12,20 @@ class BaseResponse:
     ):
         self.status_code = status_code
         """
-    Response status code (e.g. 200, 404, 500, etc.)
-    """
+        Response status code (e.g. 200, 404, 500, etc.).
+        """
 
         self.response = response
         """
-    The raw requests.Response object
-    """
+        The raw requests.Response object.
+        """
 
         self.headers = headers
         """
-    A case-insensitive dictionary of response headers
-    """
+        A case-insensitive dictionary of response headers.
+        """
 
         self.url = url
         """
-    The final URL location of the response
-    """
+        The final URL location of the response.
+        """
