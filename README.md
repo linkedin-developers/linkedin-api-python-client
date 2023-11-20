@@ -80,7 +80,7 @@ pip install linkedin-api-client
 
 ### Simple API Request Example
 
-Here is an example of using the client to make a simple GET request to [fetch the current user's profile](https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin#retrieving-member-profiles). This requires a 3-legged access token with the "r_liteprofile" scope, which is included with the Sign In With LinkedIn API product.
+Here is an example of using the client to make a simple GET request to [fetch the current user's information](https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2?context=linkedin%2Fconsumer%2Fcontext#api-request-to-retreive-member-details). This requires a 3-legged access token with the "openid" and "profile" scope, which is included with the Sign In With LinkedIn using OpenID Connect API product.
 
 ```python
 from linkedin_api.clients.restli.client import RestliClient
@@ -88,7 +88,7 @@ from linkedin_api.clients.restli.client import RestliClient
 restli_client = RestliClient()
 
 response = restli_client.get(
-  resource_path="/me",
+  resource_path="/userinfo",
   access_token=<THREE_LEGGED_ACCESS_TOKEN>
 )
 print(response.entity)
